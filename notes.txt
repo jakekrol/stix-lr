@@ -1,0 +1,46 @@
+# 11-20-25
+## goal 1: confirm using only 1kg samples for somatic cancer sv experiments
+
+- num rows in SVAFotate bed
+```
+zcat SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz | wc -l
+# 3455240
+```
+- SV counts by project
+```
+zcat SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz | tail -n +2 | cut -f6 | sort | uniq -c
+# 754213 CCDG
+# 2154486 gnomAD
+# 170242 ThousG
+# 376298 TOPMed
+```
+- there is not column that indicates which samples have the SV
+
+- example row of SVAFotate bed for 1kg
+(base) [jakr3437@mcclintock 2025_11-svafotate_bed]$ zcat SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz | grep ThousG | head -n 1
+1       27999   140000  112000  CNV     ThousG  HGSV_1  0.241208001971  1560    1454    0       0.238973006606  793     726     0       NA      NA      0.243478000164  767     728     0       0.291716009378 352      493     0       0.29587200284   178     258     0       NA      NA      0.287286013365  174     235     0       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA     NA       NA      NA      0.214285999537  268     201     0       0.206976994872  126     89      0       NA      NA      0.220471993089  142     112     0       NA      NA      NA      NA      NA      NA     NA       NA      NA      NA      NA      NA      NA      NA      0.284350991249  226     298     0       0.290565997362  111     154     0       NA      NA      0.277992010117  115     144     0       0.208263993263  353     252     0       0.196245998144  178     115     0       NA      NA      0.219550997019  175     137     0       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA     NA       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA     NA       NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      NA      0.18388800323   361     210     0       0.177419006824  200     110     0       NA      NA      0.191570997238  161     100     0       0.291716009378 
+
+- counting number of variants in for colo829_merge_grch38.vcf.gz
+```
+# probably germline SVs?
+zcat colo829_merge_grch38.vcf.gz | grep -v "^#" | wc -l
+# 30526
+# somatic svs
+grep -v "^#" colo829_benchmark_grch38.vcf  |wc -l
+# 54
+# maybe I need to keep only INS|DEL|INV|DUP?
+grep -v "^#" colo829_benchmark_grch38.vcf  | grep -E "INS|DEL|INV|DUP" | wc -l
+# 50
+# try removing BND
+zcat colo829_merge_grch38.vcf.gz | grep -v "^#" | grep -E "INS|DEL|INV|DUP" | wc -l
+# 30301
+grep -v "^#" colo829_benchmark_grch38.vcf  | grep -v "BND" | wc -l
+# 50
+zcat colo829_merge_grch38.vcf.gz | grep -v "^#" | grep -v "BND" | wc -l
+```
+
+## summary
+- found COLO sv callset on zenodo
+    - unsure why counts are a bit off for SVs
+- downloaded cosmic svs
+    - but its in a gzipped tsv, not a vcf ...
