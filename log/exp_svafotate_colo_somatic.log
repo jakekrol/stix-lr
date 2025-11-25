@@ -1,0 +1,570 @@
+Input file: ../data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+Output file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+Filtering BNDs
+[W::vcf_parse_info] INFO 'AF' is not defined in the header, assuming Type=String
+Setting END type and AF header line
+Done. Output written to ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG	0.5
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_ThousG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+CCDG	0.5
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+CCDG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_CCDG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+TOPMed	0.5
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+TOPMed
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_TOPMed.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+gnomAD	0.5
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+gnomAD
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_gnomAD.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG	0.6
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_ThousG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+CCDG	0.6
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+CCDG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_CCDG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+TOPMed	0.6
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+TOPMed
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_TOPMed.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+gnomAD	0.6
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+gnomAD
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_gnomAD.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG	0.8
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_ThousG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+CCDG	0.8
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+CCDG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_CCDG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+TOPMed	0.8
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+TOPMed
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_TOPMed.vcf
+
+DONE
+Running cmd: /data/jake/stix-lr/src/setup_colo_vcf.sh -i ../data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf -o ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf --sedfile /data/jake/stix-lr/src/setup_vcf.sed
+Starting SVAFotate experiments...
+Running SVAFotate for overlap 0.5, source ThousG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.5 -s ThousG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_ThousG.vcf --cpu 1
+Extracting Max_AF for overlap 0.5, source ThousG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_ThousG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_ThousG_maxaf.txt
+SVAFotate completed for overlap 0.5, source ThousG in 162.19 seconds
+Running SVAFotate for overlap 0.5, source CCDG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.5 -s CCDG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_CCDG.vcf --cpu 1
+Extracting Max_AF for overlap 0.5, source CCDG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_CCDG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_CCDG_maxaf.txt
+SVAFotate completed for overlap 0.5, source CCDG in 167.90 seconds
+Running SVAFotate for overlap 0.5, source TOPMed
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.5 -s TOPMed -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_TOPMed.vcf --cpu 1
+Extracting Max_AF for overlap 0.5, source TOPMed
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_TOPMed.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_TOPMed_maxaf.txt
+SVAFotate completed for overlap 0.5, source TOPMed in 162.86 seconds
+Running SVAFotate for overlap 0.5, source gnomAD
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.5 -s gnomAD -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_gnomAD.vcf --cpu 1
+Extracting Max_AF for overlap 0.5, source gnomAD
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_gnomAD.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.5-source_gnomAD_maxaf.txt
+SVAFotate completed for overlap 0.5, source gnomAD in 169.71 seconds
+Running SVAFotate for overlap 0.6, source ThousG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.6 -s ThousG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_ThousG.vcf --cpu 1
+Extracting Max_AF for overlap 0.6, source ThousG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_ThousG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_ThousG_maxaf.txt
+SVAFotate completed for overlap 0.6, source ThousG in 161.04 seconds
+Running SVAFotate for overlap 0.6, source CCDG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.6 -s CCDG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_CCDG.vcf --cpu 1
+Extracting Max_AF for overlap 0.6, source CCDG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_CCDG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_CCDG_maxaf.txt
+SVAFotate completed for overlap 0.6, source CCDG in 163.87 seconds
+Running SVAFotate for overlap 0.6, source TOPMed
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.6 -s TOPMed -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_TOPMed.vcf --cpu 1
+Extracting Max_AF for overlap 0.6, source TOPMed
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_TOPMed.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_TOPMed_maxaf.txt
+SVAFotate completed for overlap 0.6, source TOPMed in 163.30 seconds
+Running SVAFotate for overlap 0.6, source gnomAD
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.6 -s gnomAD -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_gnomAD.vcf --cpu 1
+Extracting Max_AF for overlap 0.6, source gnomAD
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_gnomAD.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.6-source_gnomAD_maxaf.txt
+SVAFotate completed for overlap 0.6, source gnomAD in 168.25 seconds
+Running SVAFotate for overlap 0.8, source ThousG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.8 -s ThousG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_ThousG.vcf --cpu 1
+Extracting Max_AF for overlap 0.8, source ThousG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_ThousG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_ThousG_maxaf.txt
+SVAFotate completed for overlap 0.8, source ThousG in 160.99 seconds
+Running SVAFotate for overlap 0.8, source CCDG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.8 -s CCDG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_CCDG.vcf --cpu 1
+Extracting Max_AF for overlap 0.8, source CCDG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_CCDG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_CCDG_maxaf.txt
+SVAFotate completed for overlap 0.8, source CCDG in 166.10 seconds
+Running SVAFotate for overlap 0.8, source TOPMed
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.8 -s TOPMed -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_TOPMed.vcf --cpu 1
+Extracting Max_AF for overlap 0.8, source TOPMed
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_TOPMed.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_TOPMed_maxaf.txt
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+gnomAD	0.8
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+gnomAD
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_gnomAD.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG	0.9
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_ThousG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+CCDG	0.9
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+CCDG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_CCDG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+TOPMed	0.9
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+TOPMed
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_TOPMed.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+gnomAD	0.9
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+gnomAD
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_gnomAD.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG	0.7
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_ThousG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+CCDG	0.7
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+CCDG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_CCDG.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+TOPMed	0.7
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+TOPMed
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_TOPMed.vcf
+
+DONE
+
+Annotating the following VCF: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Reading the following data source file: ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+gnomAD	0.7
+
+Gathering SV coordinates from VCF file: ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+gnomAD
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+
+Annoted VCF writen to: ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_gnomAD.vcf
+
+DONE
+SVAFotate completed for overlap 0.8, source TOPMed in 161.50 seconds
+Running SVAFotate for overlap 0.8, source gnomAD
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.8 -s gnomAD -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_gnomAD.vcf --cpu 1
+Extracting Max_AF for overlap 0.8, source gnomAD
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_gnomAD.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.8-source_gnomAD_maxaf.txt
+SVAFotate completed for overlap 0.8, source gnomAD in 168.17 seconds
+Running SVAFotate for overlap 0.9, source ThousG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.9 -s ThousG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_ThousG.vcf --cpu 1
+Extracting Max_AF for overlap 0.9, source ThousG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_ThousG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_ThousG_maxaf.txt
+SVAFotate completed for overlap 0.9, source ThousG in 161.59 seconds
+Running SVAFotate for overlap 0.9, source CCDG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.9 -s CCDG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_CCDG.vcf --cpu 1
+Extracting Max_AF for overlap 0.9, source CCDG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_CCDG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_CCDG_maxaf.txt
+SVAFotate completed for overlap 0.9, source CCDG in 164.53 seconds
+Running SVAFotate for overlap 0.9, source TOPMed
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.9 -s TOPMed -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_TOPMed.vcf --cpu 1
+Extracting Max_AF for overlap 0.9, source TOPMed
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_TOPMed.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_TOPMed_maxaf.txt
+SVAFotate completed for overlap 0.9, source TOPMed in 165.47 seconds
+Running SVAFotate for overlap 0.9, source gnomAD
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.9 -s gnomAD -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_gnomAD.vcf --cpu 1
+Extracting Max_AF for overlap 0.9, source gnomAD
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_gnomAD.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.9-source_gnomAD_maxaf.txt
+SVAFotate completed for overlap 0.9, source gnomAD in 169.72 seconds
+Running SVAFotate for overlap 0.7, source ThousG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.7 -s ThousG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_ThousG.vcf --cpu 1
+Extracting Max_AF for overlap 0.7, source ThousG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_ThousG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_ThousG_maxaf.txt
+SVAFotate completed for overlap 0.7, source ThousG in 163.41 seconds
+Running SVAFotate for overlap 0.7, source CCDG
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.7 -s CCDG -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_CCDG.vcf --cpu 1
+Extracting Max_AF for overlap 0.7, source CCDG
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_CCDG.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_CCDG_maxaf.txt
+SVAFotate completed for overlap 0.7, source CCDG in 162.82 seconds
+Running SVAFotate for overlap 0.7, source TOPMed
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.7 -s TOPMed -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_TOPMed.vcf --cpu 1
+Extracting Max_AF for overlap 0.7, source TOPMed
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_TOPMed.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_TOPMed_maxaf.txt
+SVAFotate completed for overlap 0.7, source TOPMed in 164.03 seconds
+Running SVAFotate for overlap 0.7, source gnomAD
+Running cmd: /data/jake/miniconda3/envs/svafotate-env/bin/svafotate annotate -v ../results/2025_11-colo_svafotate/colo829_benchmark_grch38_cln.vcf -b ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz -f 0.7 -s gnomAD -O vcf -o ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_gnomAD.vcf --cpu 1
+Extracting Max_AF for overlap 0.7, source gnomAD
+Running cmd: /data/jake/miniconda3/bin/bcftools query -f '%INFO/Max_AF
+' ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_gnomAD.vcf > ../results/2025_11-colo_svafotate/svafotate-overlap_0.7-source_gnomAD_maxaf.txt
+SVAFotate completed for overlap 0.7, source gnomAD in 168.85 seconds
+All SVAFotate experiments completed.
+Total time elapsed: 3296.35 seconds

@@ -1,3 +1,208 @@
+# 11-25-25
+## goal1 : run SVAFotate on colo germline
+```
+./exp_svafotate_colo_somatic.py \
+  --input ../data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf \
+  --bed ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz \
+  --outdir ../results/2025_11-colo_svafotate/germline \
+  --scriptdir /data/jake/stix-lr/src \
+  --cpus 1 \
+  --env_name svafotate-env 2>&1 | tee ../log/exp_svafotate_colo_germline.log
+```
+## goal2: barplot viz
+- horizontal axis: bins of AF {0, (0,1%], (1%,5%], (5%,100%]}
+- vertical axis: sv count
+- color: somatic (blue), germline + somatic (purple)
+
+```
+cd /data/jake/stix-lr/src
+./plot_colo_svafotate.py \
+  --dirgermline ../results/2025_11-colo_svafotate/germline \
+  --dirsomatic ../results/2025_11-colo_svafotate/somatic \
+  --output ../results/2025_11-colo_svafotate/colo_svafotate_bar.png
+```
+
+# 11-24-25
+## goal: run SVAFotate on COLO
+- data
+    - SVAFotate BED
+        - /data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+    - COLO somatic cancer and normal VCF
+        - somatic /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+        - normal /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf.gz
+- approach
+    - use minimum of overlap >=50% (-f 0.5)
+    - let -f vary from 0.5, 0.6, ..., 0.9
+- experiment
+    - stratifications
+        - min overlap (dim 5)
+        - SVAFotate sources (dim 4)
+        - 20 total
+        ```
+        zcat $SVAFTOTATE_BED | tail -n +2 | cut -f 6 | sort | uniq 
+        CCDG
+        gnomAD
+        ThousG
+        TOPMed
+        ```
+    - run SVAFotate for each stratified bed and with variable -f 
+
+- test example SVAFotate
+    - thousG only and colo somatic vcf
+    ```
+    vcf=/data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+    bed=/data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+    conda activate svafotate-env
+    time (svafotate annotate -f 0.9 -v $vcf -s ThousG -O vcf -b $bed -o colo829_somatic_svafotate_thousg.vcf)
+
+    ```
+error:
+Annotating with the following sources and reciprocal overlap fractions:
+Traceback (most recent call last):
+  File "/data/jake/miniconda3/envs/svafotate-env/bin/svafotate", line 8, in <module>
+    sys.exit(main())
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/__main__.py", line 41, in main
+    args.func(parser, args)
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/svafotate_main.py", line 517, in annotate
+    raise NameError(str(s) + " is an unexpected source; acceptable sources include (case-sensitive): " + ",".join(sorted(sources)))
+NameError: "ThousG" is an unexpected source; acceptable sources include (case-sensitive): CCDG,TOPMed,ThousG,gnomAD
+error 2
+(svafotate-env) [jakr3437@mcclintock 2025_11-svafotate_bed_by_source]$ time (svafotate annotate -f 0.9 -v $vcf -s ThousG -O vcf -b $bed -o colo829_somatic_svafotate_thousg.vcf)
+
+Annotating the following VCF: /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+
+Reading the following data source file: /data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG  0.9
+
+Gathering SV coordinates from VCF file: /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+[W::vcf_parse_info] INFO 'AF' is not defined in the header, assuming Type=String
+Traceback (most recent call last):
+  File "/data/jake/miniconda3/envs/svafotate-env/bin/svafotate", line 8, in <module>
+    sys.exit(main())
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/__main__.py", line 41, in main
+    args.func(parser, args)
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/svafotate_main.py", line 627, in annotate
+    end = int(v.INFO.get("END")) if v.INFO.get("END") is not None else int(v.POS)
+ValueError: invalid literal for int() with base 10: 'N[chr15:84141972['
+
+
+real    2m49.816s
+user    2m38.740s
+sys     0m12.728s
+
+
+attempt 3
+vcf=/data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38_no_bnd.vcf
+bed=/data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+time (svafotate annotate -f 0.9 -v $vcf -s ThousG -O vcf -b $bed -o colo829_somatic_svafotate_thousg.vcf)
+error 3
+time (svafotate annotate -f 0.9 -v $vcf -s ThousG -O vcf -b $bed -o colo829_somatic_svafotate_thousg.vcf)
+
+Annotating the following VCF: /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38_no_bnd.vcf
+
+Reading the following data source file: /data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+
+Annotating with the following sources and reciprocal overlap fractions:
+ThousG  0.9
+
+Gathering SV coordinates from VCF file: /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38_no_bnd.vcf
+[W::vcf_parse_info] INFO 'AF' is not defined in the header, assuming Type=String
+
+Creating pyranges object from VCF data...
+
+Running pyranges.join for:
+ThousG
+
+Creating pyranges objects per SVTYPE from VCF data...
+
+Adding annotations to output VCF...
+[W::vcf_parse_info] INFO 'AF' is not defined in the header, assuming Type=String
+Traceback (most recent call last):
+  File "/data/jake/miniconda3/envs/svafotate-env/bin/svafotate", line 8, in <module>
+    sys.exit(main())
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/__main__.py", line 41, in main
+    args.func(parser, args)
+  File "/data/jake/miniconda3/envs/svafotate-env/lib/python3.8/site-packages/svafotate/svafotate_main.py", line 1403, in annotate
+    new_vcf.write_record(v)
+  File "cyvcf2/cyvcf2.pyx", line 2371, in cyvcf2.cyvcf2.Writer.write_record
+Exception: variant to be written has errorcode: 2
+
+attempt 4
+vcf=/data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38_fixed.vcf
+bed=/data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+time (svafotate annotate -f 0.9 -v $vcf -s ThousG -O vcf -b $bed -o colo829_somatic_svafotate_thousg.vcf)
+#! successful
+
+- clearly documenting the VCF cleanup required for SVAFOTATE
+1.  BND filter
+  - breakends (BNDs) were filtered from query VCF
+  because the END encoding was strange (e.g., SVTYPE=BND;SVLEN=NA;END=N[chr19:17286830[;CHR2=chr19;SUPPORT=snf2_colo829_gsc_lifted)
+    - SVAFOTATE expected an integer
+2. Add an AF INFO field definition to VCF header
+3. Change END type from String -> Integer
+
+```
+# gpt code for adding AF INFO header
+# first line fixes the END type
+# second line, find where CHR2 info header line is
+# third line append the AF info header line after the CHR2 line
+cd /data/jake/stix-lr/data/2025_11-colo_sv_calls && cat > fix_vcf_header.sed << 'EOF'
+s/^##INFO=<ID=END,Number=1,Type=String,Description="End position of structural variation">$/##INFO=<ID=END,Number=1,Type=Integer,Description="End position of structural variation">/
+/^##INFO=<ID=CHR2,Number=1,Type=String,Description="Mate chromsome for BND SVs">$/a\
+##INFO=<ID=AF,Number=1,Type=Float,Description="Allele frequency">
+EOF
+```
+
+- so, to do this all programatically
+1. filter out BNDs
+bcftools view --exclude 'INFO/SVTYPE="BND"' input.vcf > output.vcf
+2. Set END type to integer and add AF header line
+- see scr/setup_vcf.sed
+
+- testing out querying svafotated vcf for source
+  - ah, well AF is only reported as a MAX, so it's probably
+  easiest to just run multiple times with diff -s
+  - example code to get Max_AF for all lines
+  ```
+  # each max_af gets its own line
+  bcftools query -f '%INFO/Max_AF\n' colo829_somatic_svafotate_all.vcf
+  ```
+
+- wrapper script for colo vcf svafotate experiment
+  - inputs:
+    - i) colo somatic vcf
+    - ii) svafotate bed
+  - outputs:
+    - a vcf for each (overlap_thresh, source)
+    - a text file for each vcf with line delimited max_af per variant
+
+```
+./exp_svafotate_colo_somatic.py \
+  --input ../data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf \
+  --bed ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz \
+  --outdir ../results/2025_11-colo_svafotate \
+  --scriptdir /data/jake/stix-lr/src \
+  --cpus 1 \
+  --env_name svafotate-env 2>&1 | tee ../log/exp_svafotate_colo_somatic.log
+```
+
+
+## summary
+- src/split_svafotate_bed_by_source stratified the SVAFOTATE BED by dataset (source)
+    - waste of time, just use -s instead
+- wrote script to clean colo vcf
+  - setup_colo_vcf.sh
+  - have start code for running SVAFotate on colo VCFs
+    - /data/jake/stix-lr/results/2025_11-colo_svafotate/run.sh
+
+## next steps
+- plot results for somatic colo VCFs
+  - do a histogram or binned barplot (like manuscript)
+- try experiment on germline VCF, ..., see how long it will take
+    
+
 # 11-20-25
 ## goal 1: confirm using only 1kg samples for somatic cancer sv experiments
 
