@@ -16,6 +16,7 @@ def get_args():
     parser.add_argument("--scriptdir", required=True, help="Directory containing necessary scripts")
     parser.add_argument("-p", "--cpus", type=int, default=1, help="Number of CPUs to use")
     parser.add_argument("--env_name", default="svafotate-env", help="Conda environment name for SVAFotate")
+    parser.add_argument("--cache", action='store_true', help="Use cached results if available")
     args = parser.parse_args()
     return args
 
@@ -87,8 +88,12 @@ def setup_in_vcf(input_vcf, outdir, scriptdir):
 def run_svafotate(cln_vcf, bed_file, outdir, outfile, scriptdir, cpus, env_name, overlap, source):
     # Use direct path to svafotate executable instead of conda activate
     svafotate_exe = get_conda_exe_path(env_name, 'svafotate')
-    cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} " \
-        f"-f {overlap} -s {source} -O vcf -o {outfile} --cpu {cpus}"
+    if source != "all":
+        cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} " \
+            f"-f {overlap} -s {source} -O vcf -o {outfile} --cpu {cpus}"
+    else:
+        cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} "\
+            f"-f {overlap} -O vcf -o {outfile} --cpu {cpus}"
     print("Running cmd:", cmd)
     result = os.system(cmd)
     if result != 0:
@@ -99,7 +104,7 @@ def get_overlap_params():
     return {0.5,0.6,0.7,0.8,0.9}
 
 def get_sources():
-    return {"CCDG", "gnomAD", "ThousG", "TOPMed"}
+    return {"CCDG", "gnomAD", "ThousG", "TOPMed", "all"}
 
 def extract_maxaf(vcf_annotated, outfile, env_name):
     # Use direct path to bcftools executable
@@ -127,21 +132,25 @@ def main():
         t_0 = time.time()
         out_vcf = os.path.join(args.outdir, f"svafotate-overlap_{(overlap)}-source_{source}.vcf")
         print(f"Running SVAFotate for overlap {overlap}, source {source}")
-        svafotate_vcf = run_svafotate(
-            cln_vcf,
-            args.bed,
-            args.outdir,
-            out_vcf,
-            args.scriptdir,
-            args.cpus,
-            args.env_name,
-            overlap,
-            source
-        )
-        # do max af extraction here
-        print(f"Extracting Max_AF for overlap {overlap}, source {source}")
-        extract_maxaf(svafotate_vcf, out_vcf.replace('.vcf', '_maxaf.txt'), args.env_name)
-        print(f"SVAFotate completed for overlap {overlap}, source {source} in {time.time() - t_0:.2f} seconds")
+        # cache check
+        if (os.path.exists(out_vcf)) and (args.cache):
+            print(f"Output VCF {out_vcf} already exists, skipping SVAFotate run.")
+        else:
+            svafotate_vcf = run_svafotate(
+                cln_vcf,
+                args.bed,
+                args.outdir,
+                out_vcf,
+                args.scriptdir,
+                args.cpus,
+                args.env_name,
+                overlap,
+                source
+            )
+            # do max af extraction here
+            print(f"Extracting Max_AF for overlap {overlap}, source {source}")
+            extract_maxaf(svafotate_vcf, out_vcf.replace('.vcf', '_maxaf.txt'), args.env_name)
+            print(f"SVAFotate completed for overlap {overlap}, source {source} in {time.time() - t_0:.2f} seconds")
     print("All SVAFotate experiments completed.")
     print(f"Total time elapsed: {time.time() - t_begin:.2f} seconds")
 

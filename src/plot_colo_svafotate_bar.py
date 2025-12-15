@@ -6,6 +6,9 @@ import os,sys
 import re
 import numpy as np
 
+print("DEPRECATED: Use plot_colo_roc_like.py instead.")
+sys.exit(1)
+
 parser = argparse.ArgumentParser(description="Plot SVAFotate annotation results for colo")
 parser.add_argument("--dirgermline", required=True, help="Dir with SVAFotate annotated germline results")
 parser.add_argument("--dirsomatic", required=True, help="Dir with SVAFotate annotated somatic results")

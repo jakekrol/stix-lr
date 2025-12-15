@@ -1,3 +1,469 @@
+# 12-14-25
+## goal 1: check if I can use previous results to get COSMIC SVs
+- /data/jake/lr_stix_analysis/data/lr_cosmic_pop_freq_t_1.bed
+```
+f=/data/jake/lr_stix_analysis/data/lr_cosmic_pop_freq_t_1.bed
+head $f
+#6       83872968        83879084        DEL     177
+#11      93136610        93142675        DEL     965
+#4       90839757        90925609        DEL     17
+#14      98317633        98318741        DEL     578
+#13      103279292       103279599       DEL     852
+#22      17577694        18060448        DEL     0
+#3       144974259       144974385       DEL     907
+#20      14722237        15115062        DEL     0
+#8       78167094        78167165        DEL     186
+```
+- looks like counts for each COSMIC query SV
+  - check the COSMIC SV TSV to see if some of these coordinates match
+```
+cosmic_slr=/data/jake/stix-lr/data/2025_12-cosmic_stix_lr/lr_cosmic_pop_freq_t_5.bed
+cosmic_sv_tsv=/data/jake/stix-lr/data/2025_11-cosmic_sv/Cosmic_StructuralVariants_v103_GRCh38.tsv.gz
+head $cosmic_slr
+#6       83872968        83879084        DEL     12
+#11      93136610        93142675        DEL     862
+#4       90839757        90925609        DEL     2
+#14      98317633        98318741        DEL     483
+#13      103279292       103279599       DEL     771
+#22      17577694        18060448        DEL     0
+#3       144974259       144974385       DEL     836
+#20      14722237        15115062        DEL     0
+#8       78167094        78167165        DEL     157
+#8       6933342 6933659 DEL     1028
+zcat $cosmic_sv_tsv | awk '$10=="6" && $12=="83872968" && $13="83879084"'
+#8012347 COSS1842438 COSO29005278 COST120847 intrachromosomal deletion chr6:g.(83872968_83872988)_(83879084_83879104)del COSU328 351663 6 6 83872968 83879084 83879084 83879104 + +
+#8012346 COSS1842436 COSO29005278 COST120847 intrachromosomal deletion chr6:g.(83872968_83872988)_(83879084_83879104)del COSU328 351663 6 6 83872968 83879084 83879084 83879104 + +
+zcat $cosmic_sv_tsv | awk '$10=="11" && $12=="93136610" && $13="93136610"'
+#8012346 COSS1842436 COSO29005278 COST120851 intrachromosomal deletion chr11:g.(93136610_93136630)_(93142675_93142695)del COSU328 351667 11 11 93136610 93136610 93142675 93142695 + +
+#8012347 COSS1842438 COSO29005278 COST120851 intrachromosomal deletion chr11:g.(93136610_93136630)_(93142675_93142695)del COSU328 351667 11 11 93136610 93136610 93142675 93142695 + +
+```
+- seems reasonable for now, will double check w/ Ryan and Murad
+- still need num samples in STIX-lr index
+  - check if stix-lr is on mcclintock and see if it matches num samples in publication
+```
+# launch singularity
+cd ~/sv && ./run.sh
+dstixlr=/data/stix/LR/2024-09-07
+tmp=/data/jake/tmp
+cd $dstixlr
+ls | grep giggle > $tmp/stix_lr_indices.txt
+mapfile -t indices < $tmp/stix_lr_indices.txt
+# count samples
+n=0
+for idx in "${indices[@]}"; do
+  x=$(giggle search -i $idx -l | wc -l)
+  # minus 1 for a header line
+  x=$((x-1))
+  n=$((n + x))
+done
+echo $n
+#1104
+```
+
+```
+# see if max sample count reveals pop sizes
+cut -f 5 lr_cosmic_pop_freq_t_1.bed \
+  | sort -n | uniq | tail
+# 1088
+# 1089
+# 1090
+# 1091
+# 1092
+# 1093
+# 1094
+# 1095
+# 1096
+# 1097
+```
+
+- summary so far
+  - data file (/data/jake/stix-lr/data/2025_12-cosmic_stix_lr/lr_cosmic_pop_freq_t_5.bed) 
+  seems to be for COSMIC SVs
+  - Either 1104 (mcclintock) or 1108 (manuscript) samples in stix-lr
+- next ...
+  - get pop freq for stix lr 5 reads for all cosmic SVs
+  - use stix lr data file to create a vcf of cosmic for svafotate
+  - get pop freq in svafotate for cosmic svs
+  - plot cumulative sv count versus pop freq for stix and svafotate
+
+```
+# stix lr cosmic pop freq (5 supp reads)
+
+./stix_lr_cosmic2pop_freq.py \
+  --input ../data/2025_12-cosmic_stix_lr/lr_cosmic_pop_freq_t_5.bed \
+  --output ../results/2025_12-cosmic-stix_lr/lr_cosmic_pop_freq_t_5_ps1104.bed \
+  --pop_size 1104
+```
+- making a vcf for svafotate from stix lr cosmic file
+  - what are the headers in the colo vcf? use this as a reference to convert
+```
+grep "^#" colo829_benchmark_grch38.vcf
+##fileformat=VCFv4.2
+##contig=<ID=chr1,length=248956422>
+##contig=<ID=chr2,length=242193529>
+##contig=<ID=chr3,length=198295559>
+##contig=<ID=chr4,length=190214555>
+##contig=<ID=chr5,length=181538259>
+##contig=<ID=chr6,length=170805979>
+##contig=<ID=chr7,length=159345973>
+##contig=<ID=chr8,length=145138636>
+##contig=<ID=chr9,length=138394717>
+##contig=<ID=chr10,length=133797422>
+##contig=<ID=chr11,length=135086622>
+##contig=<ID=chr12,length=133275309>
+##contig=<ID=chr13,length=114364328>
+##contig=<ID=chr14,length=107043718>
+##contig=<ID=chr15,length=101991189>
+##contig=<ID=chr16,length=90338345>
+##contig=<ID=chr17,length=83257441>
+##contig=<ID=chr18,length=80373285>
+##contig=<ID=chr19,length=58617616>
+##contig=<ID=chr20,length=64444167>
+##contig=<ID=chr21,length=46709983>
+##contig=<ID=chr22,length=50818468>
+##contig=<ID=chrX,length=156040895>
+##contig=<ID=chrY,length=57227415>
+##ALT=<ID=INS,Description="Insertion">
+##ALT=<ID=DEL,Description="Deletion">
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=INV,Description="Inversion">
+##ALT=<ID=BND,Description="Breakend; Translocation">
+##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variation">
+##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Length of structural variation">
+##INFO=<ID=END,Number=1,Type=String,Description="End position of structural variation">
+##INFO=<ID=CHR2,Number=1,Type=String,Description="Mate chromsome for BND SVs">
+##INFO=<ID=SUPPORT,Number=1,Type=String,Description="Sample support with Sample_name_program|GT|VAF for four COLO829 replicates">
+##FILTER=<ID=PASS,Description="All filters passed">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  COLO829SV
+```
+- contigs are chromosomes and their length
+- ALT are types of SVs
+- INFO
+  - SVTYPE
+  - SVLEN
+  - END
+  - CHR2: mate chr for BNDs
+  - SUPPORT: sample name, genotype, variant allele freq
+  - FILTER: filters passed
+  - GT: genotype
+
+```
+# check which SV types are in the COSMIC stix lr file
+cut -f 4 lr_cosmic_pop_freq_t_5.bed | sort | uniq -c
+# 46755 DEL
+```
+- only deletions in previous analysis
+- Q: should the analysis only consider DELs?
+- how many DELs are in COSMIC file?
+```
+zcat Cosmic_StructuralVariants_v103_GRCh38.tsv.gz \
+  | grep -c deletion
+# 56913
+```
+- okay, 56913 >> 46755, so I should probably just re-do 
+the stix lr cosmic analysis (unfortunately)
+
+## goal 2: use stix lr cosmic file to make a dummy vcf for svafotate
+- fields,headers to spoof
+  - headers (from colo somatic vcf)
+```
+##fileformat=VCFv4.2
+##contig=<ID=chr1,length=248956422>
+##contig=<ID=chr2,length=242193529>
+##contig=<ID=chr3,length=198295559>
+##contig=<ID=chr4,length=190214555>
+##contig=<ID=chr5,length=181538259>
+##contig=<ID=chr6,length=170805979>
+##contig=<ID=chr7,length=159345973>
+##contig=<ID=chr8,length=145138636>
+##contig=<ID=chr9,length=138394717>
+##contig=<ID=chr10,length=133797422>
+##contig=<ID=chr11,length=135086622>
+##contig=<ID=chr12,length=133275309>
+##contig=<ID=chr13,length=114364328>
+##contig=<ID=chr14,length=107043718>
+##contig=<ID=chr15,length=101991189>
+##contig=<ID=chr16,length=90338345>
+##contig=<ID=chr17,length=83257441>
+##contig=<ID=chr18,length=80373285>
+##contig=<ID=chr19,length=58617616>
+##contig=<ID=chr20,length=64444167>
+##contig=<ID=chr21,length=46709983>
+##contig=<ID=chr22,length=50818468>
+##contig=<ID=chrX,length=156040895>
+##contig=<ID=chrY,length=57227415>
+##ALT=<ID=INS,Description="Insertion">
+##ALT=<ID=DEL,Description="Deletion">
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=INV,Description="Inversion">
+##ALT=<ID=BND,Description="Breakend; Translocation">
+##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variation">
+##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Length of structural variation">
+##INFO=<ID=END,Number=1,Type=String,Description="End position of structural variation">
+##INFO=<ID=CHR2,Number=1,Type=String,Description="Mate chromsome for BND SVs">
+```
+  - fields 
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT
+  - ex row:
+  chr1    207807886       COLO829_SOMATIC_SV1_DEL N       <DEL>   .       PASS    SVTYPE=DEL;SVLEN=-33588;END=207841474;CHR2=chr1;AF=0.311;SUPPORT=cutesv_colo829_gsc_lifted|0/1|0.297,cutesv_colo829_ont_lifted|0/1|0.357,cutesv_colo829_pbr_lifted|0/1|0.279,cutesv_colo829_vai_lifted|0/1|0.31,nmsv_tumor_gsc_lifted|0/1|0.297,nmsv_tumor_ont_lifted|0/1|0.357,nmsv_tumor_pbr_lifted|0/1|0.279,nmsv_tumor_vai_lifted|0/1|0.31,serv_colo829_gsc_lifted|0/1|0.297,serv_colo829_ont_lifted|0/1|0.357,serv_colo829_pbr_lifted|0/1|0.279,serv_colo829_vai_lifted|0/1|0.31,snf2_colo829_gsc_lifted|0/1|0.297,snf2_colo829_ont_lifted|0/1|0.357,snf2_colo829_pbr_lifted|0/1|0.279,snf2_colo829_vai_lifted|0/1|0.31  GT       0/1
+  - I think we can fill missing data with '.'
+    - missing/unneeded columns
+      - QUAL, FILTER, FORMAT, ALT
+    - for INFO 
+      SVTYPE=DEL;SVLEN=END-POS;END=?;CHR2=#CHROM
+  
+- stix lr cosmic results to vcf for svafotate query
+```
+./stix_lr_cosmic2vcf.py \
+  --input ../data/2025_12-cosmic_stix_lr/lr_cosmic_pop_freq_t_5.bed \
+  --output ../results/2025_12-cosmic-stix_lr/cosmic_old_version.vcf
+# sort
+bcftools sort ../results/2025_12-cosmic-stix_lr/cosmic_old_version.vcf \
+  -o ../results/2025_12-cosmic-stix_lr/cosmic_old_version_sort.vcf
+# Writing to /tmp/bcftools.FIZiwS
+# [W::vcf_parse_info] INFO/END=91571704 is smaller than POS at 2:91751052
+# Merging 1 temporary files
+# Done
+# Cleaning
+```
+
+- validate vcf
+```
+vcf_validator -i ../results/2025_12-cosmic-stix_lr/cosmic_old_version_sort.vcf
+# [info] Reading from input file...
+# Lines read: 10000
+# Lines read: 20000
+# Lines read: 30000
+# Lines read: 40000
+# [info] Summary report written to : ../results/2025_12-cosmic-stix_lr/cosmic_old_version_sort.vcf.errors_summary.1765742002270.txt
+# [info] According to the VCF specification, the input file is valid
+```
+
+- try running svafotate with the curated cosmic del/ins vcf
+```
+vcf=../results/2025_12-cosmic-stix_lr/cosmic_old_version_sort.vcf
+bedfile=../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+overlap=0.9
+conda activate svafotate-env
+svafotate annotate -v $vcf -b $bedfile -f $overlap -O vcf \
+  -o "../results/2025_12-cosmic-svafotate/cosmic_svafotate_ov${overlap}_rerun.vcf"
+```
+
+```
+vcf=../results/2025_12-cosmic-stix_lr/cosmic_old_version_sort.vcf
+bedfile=../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
+overlap=0.5
+conda activate svafotate-env
+svafotate annotate -v $vcf -b $bedfile -f $overlap -O vcf \
+  -o "../results/2025_12-cosmic-svafotate/cosmic_svafotate_ov${overlap}.vcf"
+```
+
+- try svafotate with 0.5 overlap
+
+- handling sex chromosomes
+  - cosmic uses x,y
+  - stix lr uses 23,24
+  - svafotate uses x,y
+therefore, my stix2vcf script must map 23,24 -> x,y
+
+## goal 3: plot stix LR COSMIC cumulative count versus SV
+
+```
+cd /data/jake/stix-lr/src
+./plot_cosmic_stix_lr.py \
+  --input_stix_lr ../results/2025_12-cosmic-stix_lr/lr_cosmic_pop_freq_t_5_ps1104.bed \
+  --input_svafotate ../results/2025_12-cosmic-svafotate/cosmic_svafotate_ov0.9_rerun.vcf \
+  --output_dir ../results/2025_12-cosmic-stix_lr
+```
+- add svafotate cosmic results
+- re-use old code to parse max pop freq
+
+## summary
+- inspected previous stix lr cosmic results 
+  - lr_stix_analysis/data/lr_cosmic_pop_freq_t_5.bed
+    - used this (chr,start,end,type) to create a VCF of COSMIC fusions
+      - stix_lr_cosmic2vcf.py
+      - the vcf was formatted to match the COLO VCF i used with SVAFotate
+        - INS seems to be problematic ... END < start/POS
+        - however, i validated the format using vcf_validator tool
+    - extracted pop freq
+      - stix_lr_cosmic2pop_freq.py
+- plotted cumulative cosmic sv count v pop freq for stix lr and svafotate overlap=0.9
+  - problem: unsure if svafotate results are correct due to vcf formatting
+- found that latest COSMIC SV table has more DELs than the analysis done in stix lr
+
+## next steps
+- write a slack progress report to Ryan and Murad
+- add stix lr to colo benchmark
+  - confirm which stix lr index I should use
+- test out tsv -> vcf using entries that are clearly in svafotate bed
+  - this will tell me whether my vcf format is the issue or not
+  - ... update cosmic experiment results accordingly
+    
+
+# 12-12-25
+## goal 1: verify that svanna vcf and tsv formats also don't include pop freq of SVs
+
+```
+# vcf
+cd /data/jake/svanna/svanna-cli-1.2.0
+$svanna prioritize \
+  --vcf /data/jake/svanna/svanna-cli-1.2.0/examples/example.vcf \
+  --phenotype-term HP:0011890 \
+  --phenotype-term HP:0000978 \
+  --phenotype-term HP:0012147 \
+  --out-dir results \
+  --prefix example \
+  --output-format vcf \
+  --uncompressed-output
+# tsv
+$svanna prioritize \
+  --vcf /data/jake/svanna/svanna-cli-1.2.0/examples/example.vcf \
+  --phenotype-term HP:0011890 \
+  --phenotype-term HP:0000978 \
+  --phenotype-term HP:0012147 \
+  --out-dir results \
+  --prefix example \
+  --output-format tsv \
+  --uncompressed-output
+```
+
+## goal2: plot colo svafotate as classification task
+- horizontal axis: 
+  - fp/n = germlin <= pop. freq / num. germline
+- vertical axis:
+  - tp/p = somatic <= pop.freq / somatic <= pop.freq + somatic > pop. freq
+- approach
+  - for each overlap param
+    - for germline svs
+      - for somatic svs
+        - get each sv's pop freq
+    - ^get a tbl with
+    somatic/germline | pop. freq
+    s | 0
+    s | 0
+    ...
+    s | 0.1
+    g | 0.2
+    - threshold over pop. freq and compute
+      - fp / germline (fpr) and tp / p (tpr)
+    
+```
+./plot_colo_roc_like.py \
+  --dirgermline ../results/2025_11-colo_svafotate/germline \
+  --dirsomatic ../results/2025_11-colo_svafotate/somatic \
+  --output_dir ../results/2025_11-colo_svafotate/ \
+  --file_pattern source_all \
+  --cache
+```
+    
+
+
+# 12-11-25
+## goal1:
+- get pop freq for COLO from SvAnna
+- so, there's only a binary db file
+  - maybe H2 database
+- may be easier to just get the VCFs used and see if they have a max AF pop freq
+  - gnomAD: https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/genotype/nstd166/gnomad_v2.1_sv.sites.vcf.gz
+    - yes: ##INFO=<ID=POPMAX_AF
+  - HGSVC: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/HGSVC2/release/v1.0/integrated_callset/freeze3.sv.alt.vcf.gz
+    - no INFO on allele freq
+  - dbSNP
+    - ##INFO=<ID=G5,Number=0,Type=Flag,Description=">5% minor allele frequency in 1+ populations">
+    - ##INFO=<ID=G5A,Number=0,Type=Flag,Description=">5% minor allele frequency in each and all populations">
+    - ##INFO=<ID=CAF,Number=.,Type=String,Description="An ordered, comma delimited list of allele frequencies based on 1000Genomes, starting with the reference allele followed by alternate alleles as ordered in the ALT column. Where a 1000Genomes alternate allele is not in the dbSNPs alternate allele set, the allele is added to the ALT column. The minor allele is the second largest value in the list, and was previuosly reported in VCF as the GMAF. This is the GMAF reported on the RefSNP and EntrezSNP pages and VariationReporter">
+    - ##INFO=<ID=COMMON,Number=1,Type=Integer,Description="RS is a common SNP.  A common SNP is one that has at least one 1000Genomes population with a minor allele of frequency >= 1% and for which 2 or more founders contribute to that minor allele frequency.">
+    - SV sizes range from 1-49
+    - they probably check the COMMON field for filtering
+  - DGV
+    - https://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_2020-02-25.txt
+    - frequency
+      - column 14, ... it's completely empty
+      ```
+      awk -v OFS='\t' "{ print  }" DGV.GRCh38_hg38_variants_2020-02-25.txt > dgv.cln
+      cut -f 13-15 dgv.cln
+      ```
+    - try supporting variants file instead
+      - https://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_2020-02-25.txt
+      - some, not most have frequency
+so, in summary
+- pop freq in avail in DGV (tsv) and gnomAD (vcf)
+- dbSNP has a common alleles (but these are SNPs can probably ignore)
+- a simple approach may be to just add DGV to SVAFotate BED
+  - SVAFotate bed already has ThousG and gnomAD
+  - dbSNP is SNPs not SVs
+
+try running SvAnna, and see if pop freq is easy to get from output
+... installing java 17
+wget 'https://download.oracle.com/java/17/archive/jdk-17.0.12_linux-x64_bin.tar.gz'
+- downloaded the svanna data file to 
+  - /data/jake/svanna/svanna-cli-1.2.0/data
+```
+cd /data/jake/svanna/svanna-cli-1.2.0/data
+wget 'https://zenodo.org/records/17749179/files/2511_hg38.svanna.zip'
+
+```
+
+- trial run
+```
+cd /data/jake/svanna/svanna-cli-1.2.0
+# have to setup phenotype stuff first
+# takes about 5 min
+$svanna setup-phenotype -d /data/jake/svanna/svanna-cli-1.2.0/data
+# 
+$svanna prioritize \
+  --vcf /data/jake/svanna/svanna-cli-1.2.0/examples/example.vcf \
+  --phenotype-term HP:0011890 \
+  --phenotype-term HP:0000978 \
+  --phenotype-term HP:0012147 \
+  --out-dir results \
+  --prefix example
+```
+
+## summary
+- inspected the variant DBs that SvAnna uses for filtering
+  - high overlap with SVAFotate DBs
+- simplest approach is just to add the DGV pop freqs to SVAFotate bed file
+  - then run SVAFotate
+- ran SvAnna
+  - results say nothing about pop freq.
+
+# 12-2-25
+## goal1: run SVAFotate with all sources on colo germine and somatic
+
+- edited exp_svafotate_colo_somatic.py for
+  - cache check
+  - all source run
+
+```
+# germline
+./exp_svafotate_colo_somatic.py \
+  --input ../data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf \
+  --bed ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz \
+  --outdir ../results/2025_11-colo_svafotate/germline \
+  --scriptdir /data/jake/stix-lr/src \
+  --cpus 1 \
+  --cache \
+  --env_name svafotate-env 2>&1 | tee ../log/2025_12_3-exp_svafotate_colo_germline.log
+
+# somatic
+./exp_svafotate_colo_somatic.py \
+  --input ../data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf \
+  --bed ../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz \
+  --outdir ../results/2025_11-colo_svafotate/somatic \
+  --scriptdir /data/jake/stix-lr/src \
+  --cpus 1 \
+  --cache \
+  --env_name svafotate-env 2>&1 | tee ../log/2025_12_3-exp_svafotate_colo_somatic.log
+
+# plot
+./plot_colo_svafotate.py \
+  --dirgermline ../results/2025_11-colo_svafotate/germline \
+  --dirsomatic ../results/2025_11-colo_svafotate/somatic \
+  --output ../results/2025_11-colo_svafotate/colo_svafotate_bar2.png
+
 # 11-25-25
 ## goal1 : run SVAFotate on colo germline
 ```
@@ -21,6 +487,16 @@ cd /data/jake/stix-lr/src
   --dirsomatic ../results/2025_11-colo_svafotate/somatic \
   --output ../results/2025_11-colo_svafotate/colo_svafotate_bar.png
 ```
+
+## summary
+- ran SVAFotate on COLO germline
+- plotted SVAFotate germline/somatic results
+  - /data/jake/stix-lr/results/2025_11-colo_svafotate/colo_svafotate_bar.png
+
+## next steps
+- SVanna for COLO
+- SVAFotate for COSMIC
+  - requires TSV -> VCF
 
 # 11-24-25
 ## goal: run SVAFotate on COLO
