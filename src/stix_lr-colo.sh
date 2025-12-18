@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "DEPRECATED: use stix_lr-colo-parallel_contig.sh for parallelized version"
+exit 1
 srcdir=$(pwd)
 colo_somatic="${srcdir}/../data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf"
 colo_germline="${srcdir}/../data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf.gz"
