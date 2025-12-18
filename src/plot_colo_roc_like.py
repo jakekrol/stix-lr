@@ -90,12 +90,9 @@ def file_pair2score_tbl(f_germline,f_somatic):
 def score2roc(df_score):
     # get unique thresholds to sweep
     thresholds = sorted(df_score['pop_freq'].unique())
-    # include extremes
-    # min: all germline
-    # max: all somatic
+    # min: all assigned germline for visualization purposes
     min_thresh = df_score['pop_freq'].min() - 1e-6
-    max_thresh = df_score['pop_freq'].max() + 1e-6
-    thresholds = [min_thresh] + thresholds + [max_thresh]
+    thresholds = [min_thresh] + thresholds
     tpr_list = []
     fpr_list = []
     # positives are all somatics
