@@ -15,7 +15,6 @@ args = parser.parse_args()
 def validate(args):
     assert os.path.exists(args.input), f"Input file does not exist: {args.input}"
     outdir = os.path.dirname(args.output)
-    assert os.path.exists(outdir), f"Output directory does not exist: {outdir}"
     
 
 def main():

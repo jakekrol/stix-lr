@@ -1,3 +1,705 @@
+# 12-21-25
+
+## goal 1: get a txt file of colo somatic svs with 0/0 gt
+
+```
+# colo829sv column is the sample name
+# for some reason you can query for this using GT=0/0
+bcftools query -f '%ID\n' --include 'GT="0/0"' colo829_benchmark_grch38.vcf
+```
+- see /data/jake/stix-lr/results/2025_12-colo-filtered/run.sh
+  for producing a filtered vcf where GT=0/0 is excluded
+  ```
+  bcftools view --exclude 'GT="0/0"' "$input_somatic" -o "$output_somatic" -O v
+  ```
+  - this script also outputs a txt file of ids with 0/0 GT
+
+## goal 2: remove somatic svs from merge colo file
+
+- approach 1 see if any IDs from somatic file are in merge
+```
+l /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf
+```
+- no, 
+
+- approach 2: try querying regions from somatic vcf
+
+```
+bcftools query -f '%CHROM:%POS-%INFO/END\n' \
+  /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf
+```
+- good but interchromasomal svs are problematic
+```
+chr9:28034301-28157694
+chr10:7090915-N[chr19:17286830[
+chr10:7592410-N]chr18:9868619]
+chr10:81882050-82067910
+chr10:87940543-87952372
+```
+- solution: exclude interchromsomal somatic svs from analysis
+
+```
+bcftools query -f '%ID\n' --include 'INFO/SVTYPE="BND"' "$input_somatic" > "$output_somatic_bnd_ids"
+```
+
+- finally,
+  - exclude get regions of non-BND somatic SVs and find corresponding IDs in merge file
+
+```
+
+## goal 3: verify stix lr colo results
+
+# all done. elapsed time: 211306 seconds.
+
+## goal 4: get stix lr colo results (un)-filtered
+
+
+- see /data/jake/stix-lr/results/2025_12-colo-stix_lr/run.sh
+for combining stix lr results across contigs
+  - final outputs
+    - colo_germline.min_read_1.concat.sort.vcf
+    - colo_germline.min_read_5.concat.sort.vcf
+
+- now apply GT filtering to somatic
+
+- see /data/jake/stix-lr/results/2025_12-colo-stix_lr-filtered/run.sh
+for applying somatic/germline filters and getting the sample counts
+
+## goal 5: get colo svafotate filtered results
+
+- done. see /data/jake/stix-lr/results/2025_12-colo-svafotate-filtered/run.sh
+
+## goal 6: pack stixlr and svafotate colo filtered results into tar
+
+- see /data/jake/stix-lr/results/2025_12-colo_all-filtered/run.sh
+colo_filtered_stix_lr_svafotate_results.tar.gz
+
+
+## summary
+
+
+
+
+# 12-19-25
+
+## goal 1: estimate remaining time for somatic colo stix lr
+
+- count germline v somatic
+``` 
+# somatic
+cd /data/jake/stix-lr/data/2025_11-colo_sv_calls
+grep -v "^#" colo829_benchmark_grch38.vcf | grep -iv bnd | wc -l
+# 50
+# germline
+grep -v "^#" colo829_merge_grch38.vcf | grep -iv bnd | wc -l
+# 30301
+
+## goal 2:  send ryan in progress min_read_1 colo germline
+
+```
+cd /data/jake/stix-lr/results/2025_12-colo-stix_lr
+mapfile -t fmr1 < <(ls *.min_read_1.vcf | grep -v "somatic")
+mkdir tmp
+cp  ${fmr1[@]} tmp
+cd tmp
+# trim last line bc in progress leads to errors
+for file in "${fmr1[@]}"; do
+  head -n -1 "$file" > "${file}.tmp" && mv "${file}.tmp" $file
+done
+
+# concat regions
+bcftools concat $(echo ${fmr1[@]}) -O v -o colo_germline.min_read_1.concat.progress.vcf
+# sort
+bcftools sort -o colo_germline.min_read_1.concat.progress.sort.vcf colo_germline.min_read_1.concat.progress.vcf
+# bgzip
+bgzip -c colo_germline.min_read_1.concat.progress.sort.vcf \
+  > colo_germline.min_read_1.concat.progress.sort.vcf.gz
+# get tsv of sample depth
+../../../src/stixlr_vcfout2svid_cample_count.py \
+  --input colo_germline.min_read_1.concat.progress.sort.vcf \
+  --output colo_germline.min_read_1.concat.progress.tsv \
+  --add_header
+
+```
+
+## summary
+- sent stix lr colo germline progress to ryan
+  - see code for reference on concatting
+## next steps
+- from final results files,
+  - remove somatic svs with 0/0 genotype
+    -bcftools exclude by gt info
+  - remove somatics svs in germline/merge output
+    -bcftools exclude by region/id/...?
+- regenerate the array tsvs from filtered result vcfs
+  - send over slack
+- check status of stix lr colo minread5/1
+- convert cosmic tsv -> vcf
+  - run cosmic
+    - svafotate
+    - stix lr
+
+# 12-18-25
+## goal 1: verify that stix -B and -f produce output correctly
+- that is, sharding and vcf are compatible
+    - yes
+    - proof: STIX_ZERO=284;STIX_ONE=824
+## goal 2: svafotate for hg002 with variable overlap
+
+```
+cd /data/jake/stix-lr/src
+./svafotate-hg002_cmrg.py \
+  --input ../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.vcf \
+  --outdir ../results/2025_12-hg002_cmrg-svafotate \
+  --bed $SVAFTOTATE_BED \
+  --env_name svafotate-env
+
+## goal 3: try splitting vcf and merging
+
+```
+cd /data/jake/tmp
+mkdir vcf_split_merge && cd vcf_split_merge
+cp /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf \
+bgzip -c colo829_merge_grch38.vcf > colo829_merge_grch38.vcf.gz
+vcf_all=colo829_merge_grch38.vcf.gz
+tabix -p vcf $vcf_all
+# chr1
+bcftools view -r chr1 -O v -o chr1.$vcf_all $vcf_all
+# chr2
+bcftools view -r chr2 -O v -o chr2.$vcf_all $vcf_all
+```
+works, now try merge
+```
+bcftools concat chr1.$vcf_all chr2.$vcf_all -O v -o merged1_2.$vcf_all
+```
+
+## goal 4: hg002 stix lr vcf to popfreq tsv
+
+```
+# 1 min read
+./stixlr_vcfout2svid_cample_count.py \
+  --input ../results/2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_1.vcf \
+  --output ../results/2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_1.popfreq.tsv \
+  --add_header
+# 5 min read
+./stixlr_vcfout2svid_cample_count.py \
+  --input ../results/2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.vcf \
+  --output ../results/2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.popfreq.tsv \
+  --add_header
+```
+
+## goal 5: tar archive hg002 stix lr and svafotate results
+
+```
+./tar_hg002_results.sh /data/jake/tmp
+```
+
+## goal 6: split colo germline vcf by contig
+
+- ex code to get uniq contigs
+```
+grep "^##contig" /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf | \
+  cut -d ',' -f 1 | cut -d '=' -f 3 
+```
+
+```
+outdir=../results/2025_12-colo_germline_split
+input=../data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf
+tmp=/data/jake/tmp
+prefix=colo_germline
+./split_colo_germline_by_contig.sh \
+  --input $input \
+  --outdir $outdir \
+  --tempdir $tmp \
+  --prefix $prefix \
+  --vcf_needs_bgz
+```
+
+## goal 7: parallelize colo stix lr by contig
+
+```
+./stix_lr-colo-parallel_contig.sh \
+  --indir ../results/2025_12-colo_germline_split \
+  --outdir ../results/2025_12-colo-stix_lr \
+  --tempdir /data/jake/tmp \
+  --index /data/jake/stix-lr-grch38
+```
+
+## goal 8: send ryan somatic colo stix lr
+```
+in1=/data/jake/stix-lr/results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_1.vcf
+out1=/data/jake/stix-lr/results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_1.svid_sample_count.tsv
+cd /data/jake/stix-lr/src
+./stixlr_vcfout2svid_cample_count.py \
+  --input $in1 \
+  --output $out1 \
+  --add_header
+```
+
+```
+# from local
+rsync -vaP mcclintock:/data/jake/stix-lr/results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_1.svid_sample_count.tsv \
+  .
+rsync -vaP mcclintock:/data/jake/stix-lr/results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_5.svid_sample_count.tsv \
+  .
+```
+
+
+## summary
+- split and parallelized stix lr colo germline
+- finished stix lr and svafotate hg002 results
+  - see results/2025_12-hg002_all/hg002_cmrg_stix_lr_svafotate_results.tar.gz
+- verified that stix works with shardfile and vcf input
+  - STIX_ONE and STIX_ZERO were correct in the output vcfs
+
+# 12-17-25
+# goal 1: run stix lr on colo
+- test out stix built-in sharding utility
+- here's claude's summary of how sharding (-B) works
+
+-B takes a sharding file as an argument
+  - a 2 col tsv of giggle_path | stixdb_path
+  - lines are shards
+
+- let's do a small test
+```
+# make 2 stix dbs
+cd /data/jake/genefusion/data/dna_pad/headneck/shards
+cd shard_0
+echo "Alt_file" > headneck.ped
+ls beds | sort >> headneck.ped
+stix -i headneck_sort_b -p headneck.ped -d headneck.ped.db
+cd ../shard_1
+echo "Alt_file" > headneck.ped
+ls beds | sort >> headneck.ped
+stix -i headneck_sort_b -p headneck.ped -d headneck.ped.db
+# make shard file
+cd ../
+printf "shard_0/headneck_sort_b\tshard_0/headneck.ped.db\nshard_1/headneck_sort_b\tshard_1/headneck.ped.db\n" \
+  > shardfile.test
+```
+- try querying with shard file
+```
+stix -t DEL -l 1:9996-9996 -r 1:10016-10112 \
+  -B shardfile.test
+  $ stix -t DEL -l 1:9996-9996 -r 1:10016-10112   -B shardfile.test
+#stix_run_giggle_query: left:1 9996 9996 right:1 10016 10112
+#Could not open file 'beds/FI13317.excord.bed.gz'
+#stix: Could not open beds/FI13317.excord.bed.gz.
+```
+- lookslike all shards need to be in same curdir
+- ah tricky, because the gigle index is sensitive to paths
+  - so, you need to make sure the dir with bed files has 
+  unique names per shard...
+- let's try on 1kg/LR
+```
+# make shardfile
+tmp=/data/jake/tmp
+cd /data/stix/LR/2024-09-07
+ls | grep giggle_idx > $tmp/x
+ls | grep stix_idx > $tmp/y
+paste $tmp/x $tmp/y > $tmp/z
+head $tmp/z
+```
+- test query
+- from HG00171.sorted.1kgvienna.t2t.bed.gz
+  - in /data/stix/LR/2024-09-07/02.1.data_shard00
+```
+tmp=/data/jake/tmp
+left="1:1064-6995"
+right="1:2361-7024"
+cd /data/stix/LR/2024-09-05
+# from sample HG00110.1000g.ont.sorted.bed.gz
+# 1       10000   10379   1       1       10433   35120   1       1
+left=1:10000-10379
+right=1:10433-35120
+stix -t DEL -l $left -r $right -s 500 -c 5 \
+  -i 03.1.giggle_idx_00 -d 03.1.stix_idx_00.db
+# stix -t DEL -l $left -r $right -B $tmp/z -s 500 -c 1 -T 1
+```
+
+- seems like I need write access to giggle subdirs?
+
+```
+# working test example
+singularity /data/jake/genefusion/data/dna_pad/headneck/shards/shard_0 
+$ stix -t DEL -l 1:10000-20000 -r 1:11000-20000 -i headneck_sort_b -d headneck.ped.db -s 500
+stix_run_giggle_query: left:1 10000 20000       right:1 11000 20000
+Total   0:1     0:4     0:0:0   0:0:0:0
+Giggle_File_Id  Alt_file        Pairend Split
+0       FI13317.excord.bed.gz   59      0
+1       FI22814.excord.bed.gz   100     0
+2       FI34579.excord.bed.gz   67      0
+3       FI9326.excord.bed.gz    60      0
+singularity /data/jake/genefusion/data/dna_pad/headneck/shards/shard_0 
+$ ls 
+beds  headneck.ped  headneck.ped.db  headneck_sort_b
+singularity /data/jake/genefusion/data/dna_pad/headneck/shards/shard_0 
+$ ls -lsh headneck_sort_b/
+total 5.7G
+222M -rw-rw----+ 1 jakr3437 nogroup 222M Dec  5 15:10 cache.0.dat
+7.6M -rw-rw----+ 1 jakr3437 nogroup 7.6M Dec 17 12:46 cache.0.idx
+```
+
+```
+# failing example on LR index
+singularity /data/stix/LR/2024-09-05 
+$ stix -t DEL -l $left -r $right -s 500 -c 5 \
+>   -i 03.1.giggle_idx_00 -d 03.1.stix_idx_00.db
+stix_run_giggle_query: left:1 10000 10379       right:1 10433 35120
+stix: Could not open index_file '03.1.giggle_idx_00/cache.0.idx'.: Permission denied
+singularity /data/stix/LR/2024-09-05 
+$ ls -lsh 03.1.giggle_idx_00 | head
+total 22G
+ 4.9G -rwxr-x---. 1 nobody nogroup  4.9G Sep 16  2024 cache.0.dat
+ 3.8M -rwxr-x---. 1 nobody nogroup  3.8M Sep 24 13:37 cache.0.idx
+ 876M -rwxr-x---. 1 nobody nogroup  876M Sep 16  2024 cache.1.dat
+ 1.9M -rwxr-x---. 1 nobody nogroup  1.9M Sep 24 13:37 cache.1.idx
+  12K -rwxr-x---. 1 nobody nogroup  9.1K Sep 16  2024 cache.10.dat
+ 4.0K -rwxr-x---. 1 nobody nogroup   498 Sep 24 13:37 cache.10.idx
+ 4.0K -rwxr-x---. 1 nobody nogroup   270 Sep 16  2024 cache.100.dat
+ 4.0K -rwxr-x---. 1 nobody nogroup   138 Sep 24 13:37 cache.100.idx
+ 4.0K -rwxr-x---. 1 nobody nogroup   204 Sep 16  2024 cache.101.dat
+```
+
+- test copying a shard of index
+
+```
+dout=/data/jake/stix-lr-grch38
+cp -r 02.1.data.00 $dout
+cp -r  03.1.giggle_idx_00 $dout
+cp 03.1.meta.ped.00 $dout
+cp 03.1.stix_idx_00.db $dout
+singularity /data/jake/stix-lr-grch38 
+$ stix -t DEL -l $left -r $right -s 500 -c 5 \
+>   -i 03.1.giggle_idx_00 -d 03.1.stix_idx_00.db
+stix_run_giggle_query: left:1 10000 10379       right:1 10433 35120
+Total   0:1     4:45    0:0:0   0:0:0:0
+Giggle_File_Id  Sample  Sex     population      Super_population        Alt_File     Pairend  Split
+0       GM18501.1000g.ont       1       NA      NA      GM18501.1000g.ont.sorted.bed.gz       0       5
+1       GM18519.1000g.ont       1       NA      NA      GM18519.1000g.ont.sorted.bed.gz       0       4
+2       GM18856.1000g.ont       1       NA      NA      GM18856.1000g.ont.sorted.bed.gz       0       2
+3       GM18861.1000g.ont       1       NA      NA      GM18861.1000g.ont.sorted.bed.gz       0       8
+```
+- a copy of index works!
+- try using sharding utility
+
+```
+left=1:10000-10379
+right=1:10433-35120
+stix -t DEL -l $left -r $right -s 500 -c 5 \
+  -B /data/jake/tmp/z
+# stix_run_giggle_query: left:1 10000 10379       right:1 10433 35120
+# Total   0:1     4:45    0:0:0   0:0:0:0
+# Giggle_File_Id  Sample  Sex     population      Super_population        Alt_File        Pairend Split
+# 0       GM18501.1000g.ont       1       NA      NA      GM18501.1000g.ont.sorted.bed.gz 0       5
+# 1       GM18519.1000g.ont       1       NA      NA      GM18519.1000g.ont.sorted.bed.gz 0       4
+# 2       GM18856.1000g.ont       1       NA      NA      GM18856.1000g.ont.sorted.bed.gz 0       2
+# 3       GM18861.1000g.ont       1       NA      NA      GM18861.1000g.ont.sorted.bed.gz 0       8
+# 4       GM18864.1000g.ont       1       NA      NA      GM18864.1000g.ont.sorted.bed.gz 0       30
+# 5       GM18865.1000g.ont       1       NA      NA      GM18865.1000g.ont.sorted.bed.gz 0       12
+# 6       GM18871.1000g.ont       1       NA      NA      GM18871.1000g.ont.sorted.bed.gz 0       8
+# 7       GM18876.1000g.ont       1       NA      NA      GM18876.1000g.ont.sorted.bed.gz 0       0
+# 8       GM18924.1000g.ont       1       NA      NA      GM18924.1000g.ont.sorted.bed.gz 0       5
+```
+- ... 49 samples were returned
+- try adding one more shard to see how output changes
+```
+# add shard 1
+dout=/data/jake/stix-lr-grch38
+cd /data/stix/LR/2024-09-05
+cp -r 03.1.giggle_idx_01 $dout
+cp 03.1.stix_idx_01.db $dout
+cp 03.1.meta.ped.01 $dout
+cp -r 02.1.data.01 $dout
+printf "03.1.giggle_idx_01\t03.1.stix_idx_01.db\n" >> /data/jake/tmp/z
+```
+
+```
+# query with 2 lines in shard file
+left=1:10000-10379
+right=1:10433-35120
+stix -t DEL -l $left -r $right -s 500 -c 5 \
+  -B /data/jake/tmp/z
+```
+- yes! this output had 49 + 50 samples
+
+- start copying over all files to /data/jake/stix-lr-grch38
+```
+cd /data/stix/LR/2024-09-05
+dout=/data/jake/stix-lr-grch38
+ls | grep -v "^02.1.data$" | \
+  gargs --log=$dout/copy.log -p 4 "cp -r {0} $dout"
+```
+- next, finally setup queries for COLO!
+- make shardfile
+```
+ls | grep giggle_idx | sort > x
+ls | grep "db$" | sort > y
+paste x y > shardfile.txt
+rm x y
+```
+- note: small stix shard test script at /data/jake/stix-lr-grch38/test.sh
+approach for stix lr colo
+- input: COLO VCF
+  - do somatic first for faster testing
+```
+cd /data/jake/stix-lr-grch38
+colo_somatic="/data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf"
+outfile=/data/jake/stix-lr/results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_5.txt
+stix -B shardfile.txt -s 500 -f $colo_somatic -T 5 > $outfile
+```
+
+- get pop freq and svid table
+```
+cd /data/jake/stix-lr/src
+./stixlr_vcfout2svid_cample_count.py \
+  --input ../results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_5.txt \
+  --output ../results/2025_12-colo-stix_lr/colo_somatic.stix_lr.min_read_5.svid_sample_count.tsv \
+  --add_header
+```
+
+- run colo somatic,germline with 5 and 1 min reads
+```
+cd /data/jake/stix-lr/src
+stix_lr-colo.sh
+```
+
+## goal 2: hg002 stix lr
+```
+cd /data/jake/stix-lr/src
+./stix_lr-hg002_cmrg.sh
+```
+
+## goal 3: hg002 svafotate
+```
+./svafotateout2svid_maxaf.py \
+  --input ../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.vcf \
+  --output ../results/2025_12-hg002_cmrg-svafotate/hg002_cmrg-svafotate-svid_maxpopfreq.tsv \
+  --add_header
+```
+- done
+
+## goal 4: hg002 svanna
+
+```
+input=../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.vcf
+outdir=../results/2025_12-hg002_cmrg-svanna
+$svanna prioritize \
+  --vcf=$input \
+  --output-format=tsv \
+  --frequency-threshold=0.1 \
+  --no-breakends \
+  --out-dir=$outdir \
+  --overlap-threshold=80 \
+  --phenotype-term HP:0011890 # useless, but needed to run
+```
+
+
+
+
+
+## summary
+- learned how to use -B and -f with stix
+  - -B <shardfile> automatically combines stix queries across shards
+  - -f <vcf> will search using a vcf as input
+- started running stix lr with min_reads=1or5 for colo somatic/germline
+- wrote stixlr_vcfout2svid_cample_count.py to get 
+  - svid\tsample_count from stix lr output vcf
+- ran hg002 stix lr
+
+## next steps
+- once stix lr colo is done, send updated tar to Ryan
+- COSMCI
+  - convert latest cosmic tsv -> vcf
+  - run stixlr, svafotate, svanna on it
+- HG002
+  - run svafotate, try svanna again
+    - let ov vary for svafotate
+
+
+
+
+
+
+
+
+
+# 12-16-25
+## goal 1: send svafotate colo data to ryan for plotting
+- wants 2 arrays indexed by svs
+  - array of positives (somatic)
+  - array of negatives (germline)
+  - elements are num. samples
+    - right now, i have pop freq only, ..., but I can see if # samples makes sense
+- get ^ for each overlap parameter
+
+- ex svafotatefile
+```
+ex=/data/jake/stix-lr/results/2025_11-colo_svafotate/somatic/svafotate-overlap_0.5-source_all.vcf
+```
+
+Max_AF v Max_PopMax_AF
+- summary: use Max_AF for global interpretation, use PopMax_AF for sub population interpretation
+```
+Why both fields exist (practical interpretation)
+Use Max_AF when:
+You care about global rarity.
+You are filtering broadly common SVs.
+You want a simple “how common is this overall?” metric.
+Use Max_PopMax_AF when:
+You want to avoid filtering out population-specific common variants.
+You are doing rare disease analysis.
+You want to be conservative about declaring something “rare.”
+In clinical / rare-variant workflows, Max_PopMax_AF is usually the safer filter.
+```
+- luckily, current code already uses Max_AF
+
+- let's try to track the SVID alongside Max_AF for ordering purposes
+- approach:
+  - input: svafotate vcf
+  - ouput: 2-col tsv of SVID and Max_AF
+```
+# somatic
+overlaps=("0.5" "0.6" "0.7" "0.8" "0.9")
+for ov in "${overlaps[@]}"; do
+  ./svafotateout2svid_maxaf.py \
+    --input "../results/2025_11-colo_svafotate/somatic/svafotate-overlap_${ov}-source_all.vcf" \
+    --output "../results/2025_11-colo_svafotate/somatic/svafotate-overlap_${ov}-source_all.maxpopfreq.txt" \
+    --add_header
+done
+# germline
+for ov in "${overlaps[@]}"; do
+  ./svafotateout2svid_maxaf.py \
+    --input "../results/2025_11-colo_svafotate/germline/svafotate-overlap_${ov}-source_all.vcf" \
+    --output "../results/2025_11-colo_svafotate/germline/svafotate-overlap_${ov}-source_all.maxpopfreq.txt" \
+    --add_header
+done
+
+# combine into tar archive
+mkdir tmp && cd tmp
+# somatic
+cp /data/jake/stix-lr/results/2025_11-colo_svafotate/somatic/*maxpopfreq.txt .
+ls | gargs "mv {0} somatic.{0}"
+# germline
+cp /data/jake/stix-lr/results/2025_11-colo_svafotate/germline/*.maxpopfreq.txt .
+ls | grep -v somatic | gargs "mv {0} germline.{0}"
+tar -czf colo_svafotate.tar.gz *.txt 
+mv colo_svafotate.tar.gz ../
+cd ../
+rm -ri tmp
+
+```
+
+
+
+## goal 2: send current cosmic data to ryan for plotting
+- get a quick svid\tsample count for stix lr cosmic for Ryan
+```
+cd /data/jake/stix-lr/results/2025_12-cosmic-stix_lr
+out=cosmic-stix_lr.counts.tsv
+printf "svid\tsample_count\n" > $out
+tail -n +2 lr_cosmic_pop_freq_t_5_ps1104.bed | \
+  awk -v OFS='\t' '{ print $4"."$1"."$2"."$3, $5 }' >> $out
+- download this file and send to Ryan
+
+## goal 3: start stix queries for colo
+- revisit old stix sharded code
+
+
+## goal 4: not a goal
+- important note: the hg002 cmrg sent by ryan has INS and DEL with non-neg SVLEN ...
+  - use this as a reference for COSMIC TSV -> VCF
+
+## summary
+- aggregated svafotate colo results and sent to ryan
+  - colo_svafotate.tar.gz
+- sent ryan cosmic data for plotting
+  - /data/jake/stix-lr/results/2025_12-cosmic-stix_lr/cosmic-stix_lr.counts.tsv
+- noticed that VCF should not have neg len, so adjust tsv -> vcf conversion for COSMIC
+- wrote /data/jake/stix/src/stix.py
+  - for searching
+
+## next steps
+- add shard support for stix_search.py
+- add parallelization support for stix_search.py
+
+# 12-15-25
+## goal 1: get info on lr indices on mcclintock
+
+### 2024-09-07 index
+```
+cd /data/stix/LR/2024-09-07
+```
+likely t2t reference
+```
+ls 02.1.data | head -n 3
+# GM18501_chm13.1kgont.sorted.bed.gz
+# GM18519_chm13.1kgont.sorted.bed.gz
+# GM18856_chm13.1kgont.sorted.bed.gz
+```
+
+```
+zcat HG04131.sorted.1kgvienna.t2t.bed.gz | cut -f1 | sort | uniq  | wc -l
+# 25
+```
+25 contigs
+```
+ls *.gz | wc -l
+# 1106
+```
+1106 samples
+
+```
+tail -n +2  03.1.meta.ped | cut -f1 | sort | uniq | wc -l
+```
+
+### 2024-09-05 index
+```
+cd /data/stix/LR/2024-09-05
+```
+
+```
+ls 02.1.data | head -n 3
+# GM18501.1000g.ont.sorted.bed.gz
+# GM18519.1000g.ont.sorted.bed.gz
+# GM18856.1000g.ont.sorted.bed.gz
+```
+- likely grch38 ref because no t2t in filename
+```
+zcat NA18516.vienna.sorted.bed.gz | cut -f 1 | sort | uniq | wc -l
+# 133
+```
+133 contigs
+
+```
+ls *.gz | wc -l
+# 1108
+```
+1108 samples
+
+```
+tail -n +2  03.1.meta.ped | cut -f1 | sort | uniq | wc -l
+# 1108
+```
+
+## summary
+
+- /data/stix/LR/2024-09-05
+  - seems to be grch38 with 1108 samples
+- /data/stix/LR/2024-09-07
+  - seems to be t2t with 1106 samples
+
+
+## next steps
+- get stix COLO results using /data/stix/LR/2024-09-05 index
+- add to roc plot
+- add auc computation
+- ... try injecting a cosmic sv into svafotate bed to see if tsv->vcf conversion is the issue
+
+
+
+
 # 12-14-25
 ## goal 1: check if I can use previous results to get COSMIC SVs
 - /data/jake/lr_stix_analysis/data/lr_cosmic_pop_freq_t_1.bed
