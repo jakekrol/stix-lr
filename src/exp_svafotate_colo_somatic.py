@@ -17,7 +17,12 @@ def get_args():
     parser.add_argument("-p", "--cpus", type=int, default=1, help="Number of CPUs to use")
     parser.add_argument("--env_name", default="svafotate-env", help="Conda environment name for SVAFotate")
     parser.add_argument("--cache", action='store_true', help="Use cached results if available")
+    parser.add_argument("--timefile", help="File to log execution times")
+    parser.add_argument("--source_all", action='store_true', help="Use all sources")
     args = parser.parse_args()
+    if args.timefile and os.path.exists(args.timefile):
+        print(f"# removing existing timefile {args.timefile}")
+        os.remove(args.timefile)
     return args
 
 def get_conda_exe_path(env_name, executable):
@@ -85,7 +90,7 @@ def setup_in_vcf(input_vcf, outdir, scriptdir):
     os.system(cmd)
     return cln_vcf
 
-def run_svafotate(cln_vcf, bed_file, outdir, outfile, scriptdir, cpus, env_name, overlap, source):
+def run_svafotate(cln_vcf, bed_file, outdir, outfile, scriptdir, cpus, env_name, overlap, source, timefile=None):
     # Use direct path to svafotate executable instead of conda activate
     svafotate_exe = get_conda_exe_path(env_name, 'svafotate')
     if source != "all":
@@ -95,7 +100,13 @@ def run_svafotate(cln_vcf, bed_file, outdir, outfile, scriptdir, cpus, env_name,
         cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} "\
             f"-f {overlap} -O vcf -o {outfile} --cpu {cpus}"
     print("Running cmd:", cmd)
+    t_s = time.time()
     result = os.system(cmd)
+    t_e = time.time()
+    if timefile:
+        with open(timefile, 'a') as tfh:
+            tfh.write(f"svafotate_ov{overlap}_source_{source}\t{t_e - t_s:.4f} seconds\n")
+        print(f"# wrote time to {timefile}")
     if result != 0:
         print(f"Error running svafotate for {cln_vcf}: exit code {result}")
     return outfile
@@ -125,7 +136,10 @@ def main():
 
     # Run SVAFotate for each combination of overlap fractions and sources
     overlap_params = get_overlap_params()
-    sources = get_sources()
+    if not args.source_all:
+        sources = get_sources()
+    else:
+        sources = {"all"}
     combos = itertools.product(overlap_params, sources)
     print("Starting SVAFotate experiments...")
     for overlap, source in combos:
@@ -145,7 +159,8 @@ def main():
                 args.cpus,
                 args.env_name,
                 overlap,
-                source
+                source,
+                timefile=args.timefile
             )
             # do max af extraction here
             print(f"Extracting Max_AF for overlap {overlap}, source {source}")

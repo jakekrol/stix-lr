@@ -1,4 +1,207 @@
+# 01-07-26
+## goal 1: test needLR
+- environment
+```
+conda create -n needlr
+conda activate needlr
+conda install -c bioconda truvari bcftools samtools bedtools
+```
+- needLR setup
+```
+# needlr files
+wget https://s3.amazonaws.com/1000g-ont/needLR/needLR_v3.5_local.tar.gz
+# extract
+tar -xvzf needLR_v3.5_local.tar.gz
+# note: the archive includes many unnecessary parent dirs
+# i moved need
+
+# recommended grch38 reference
+wget 'ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz'
+# needs to be bgzipped instead of gzipped
+gunzip GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+bgzip GCA_000001405.15_GRCh38_no_alt_analysis_set.fna
+samtools faidx GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+# test
+./needLR_v3.5_basic.sh -g GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz \
+  -l EXAMPLE/input_list.txt
+# works
+
+```
+- Pop_Freq_ALL column is #43 (1-indexed)
+
+- what does input example file look like?
+- VCFv4.2 sniffles
+- many contigs
+
+## goal 2: try needLR on colo
+- input vcf needs to be bgzipped and indexed
+```
+bgzip <input>
+bcftools index <input>.gz
+```
+- see /data/jake/stix-lr/results/2025_12-colo-stix_lr-filtered/run.sh
+
+## goal 3: re-run svafotate and record timing
+- where colo svafotate code?
+at /data/jake/stix-lr/results/2025_12-colo-svafotate-filtered
+- run.sh is here
+- ah, but this code just cleaned up somatic and germline
+  - svafotate was not actually run here
+- re-run svafotate with filtered colo
+
+- started re-run at /data/jake/stix-lr/results/2026_01-colo-svafotate-filt-rerun
+- timings are recorded for each svafotate command
+```
+# snippet of svafotate timing code from src/exp_svafotate_colo_somatic.py
+if source != "all":
+    cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} " \
+        f"-f {overlap} -s {source} -O vcf -o {outfile} --cpu {cpus}"
+else:
+    cmd = f"{svafotate_exe} annotate -v {cln_vcf} -b {bed_file} "\
+        f"-f {overlap} -O vcf -o {outfile} --cpu {cpus}"
+print("Running cmd:", cmd)
+t_s = time.time()
+result = os.system(cmd)
+t_e = time.time()
+if timefile:
+    with open(timefile, 'a') as tfh:
+        tfh.write(f"svafotate_ov{overlap}_source\t{t_e - t_s:.4f} seconds\n")
+    print(f"# wrote time to {timefile}")
+```
+
+## summary
+- ran needlr on test and colo somatic
+- started colo svafotate re-run with timing
+
+## next steps
+- for svafotate-hg002, stix-colo, stix-hg002
+  - get timings
+- run needlr on colo and hg002
+- convert cosmic tsv -> vcf
+
+# 12-26-25
+## goal 1: check giggle index progress of pcawg dna indices
+
+```
+cd /data/jake/stix-pcawg-dna
+# list all indices
+mapfile -t indices < <(ls | grep "index\.[0-9]")
+for idx in "${indices[@]}"; do
+  len=$(giggle search -i "$idx" -l | wc -l)
+  printf "${idx}\t$((len - 1))\n"
+done
+```
+- looks good
+
+## goal 2: make ped files for each pcawg dna shard
+
+- approach
+for each shard data dir
+  make a tsv
+  for each file
+    make a row in tsv
+      put minimal ped columns: sample, sex, population, super_population, alt_file
+        <filename minus .excord.gz extension> <NA> <NA> <NA> <filename>
+      extra columns come from metadata from icgc file
+- make the minimal peds first then join on the icgc data
+- have script to generate ped file per data shard
+  - see /data/jake/stix-pcawg-dna/data2ped.py
+- now apply this systematically to all data shards
+  - see run.sh
+
+## summary
+- verified all pcwag dna index cmds were successful
+- made ped files for each shard
+
+## next steps
+
+# 12-25-25
+## goal 1: continue setting up pcawg indices
+
+- added indexing to /data/jake/stix-pcawg/dna/run.shard
+- started indexing
+- need to setup ped files for stix indexing
+
+q: what are columns and order in stix lr index ped files?
+```
+head /data/stix/LR/2024-09-05/03.1.meta.ped.00
+# Sample  Sex     population      Super_population        Alt_File
+# GM18501.1000g.ont       1       NA      NA      GM18501.1000g.ont.sorted.bed.gz
+# GM18519.1000g.ont       1       NA      NA      GM18519.1000g.ont.sorted.bed.gz
+# GM18856.1000g.ont       1       NA      NA      GM18856.1000g.ont.sorted.bed.gz
+# GM18861.1000g.ont       1       NA      NA      GM18861.1000g.ont.sorted.bed.gz
+# GM18864.1000g.ont       1       NA      NA      GM18864.1000g.ont.sorted.bed.gz
+# GM18865.1000g.ont       1       NA      NA      GM18865.1000g.ont.sorted.bed.gz
+# GM18871.1000g.ont       1       NA      NA      GM18871.1000g.ont.sorted.bed.gz
+# GM18876.1000g.ont       1       NA      NA      GM18876.1000g.ont.sorted.bed.gz
+# GM18924.1000g.ont       1       NA      NA      GM18924.1000g.ont.sorted.bed.gz
+```
+- sample (filename without sort.bed.gz extension)
+- Sex
+- population
+- Super_population
+- alt_file: full filename
+- ! add other metadata by joining the metadata from icgc file
+
+# 12-23-25
+
+## goal 1: index pcawg s.t. it follows stix sharding support
+- check stix sharding structure
+```
+/data/stix/LR/2024-09-05/
+ls
+# 02.1.data     02.1.data.11  03.1.build_indexes.sh  03.1.giggle_idx_11  03.1.meta.ped     03.1.meta.ped.11  03.1.stix_idx_00.db  03.1.stix_idx_12.db
+# 02.1.data.00  02.1.data.12  03.1.giggle_idx_00     03.1.giggle_idx_12  03.1.meta.ped.00  03.1.meta.ped.12  03.1.stix_idx_01.db  03.1.stix_idx_13.db
+# 02.1.data.01  02.1.data.13  03.1.giggle_idx_01     03.1.giggle_idx_13  03.1.meta.ped.01  03.1.meta.ped.13  03.1.stix_idx_02.db  03.1.stix_idx_14.db
+# 02.1.data.02  02.1.data.14  03.1.giggle_idx_02     03.1.giggle_idx_14  03.1.meta.ped.02  03.1.meta.ped.14  03.1.stix_idx_03.db  03.1.stix_idx_15.db
+# 02.1.data.03  02.1.data.15  03.1.giggle_idx_03     03.1.giggle_idx_15  03.1.meta.ped.03  03.1.meta.ped.15  03.1.stix_idx_04.db  03.1.stix_idx_16.db
+# 02.1.data.04  02.1.data.16  03.1.giggle_idx_04     03.1.giggle_idx_16  03.1.meta.ped.04  03.1.meta.ped.16  03.1.stix_idx_05.db  03.1.stix_idx_17.db
+# 02.1.data.05  02.1.data.17  03.1.giggle_idx_05     03.1.giggle_idx_17  03.1.meta.ped.05  03.1.meta.ped.17  03.1.stix_idx_06.db  03.1.stix_idx_18.db
+# 02.1.data.06  02.1.data.18  03.1.giggle_idx_06     03.1.giggle_idx_18  03.1.meta.ped.06  03.1.meta.ped.18  03.1.stix_idx_07.db  03.1.stix_idx_19.db
+# 02.1.data.07  02.1.data.19  03.1.giggle_idx_07     03.1.giggle_idx_19  03.1.meta.ped.07  03.1.meta.ped.19  03.1.stix_idx_08.db  03.1.stix_idx_20.db
+# 02.1.data.08  02.1.data.20  03.1.giggle_idx_08     03.1.giggle_idx_20  03.1.meta.ped.08  03.1.meta.ped.20  03.1.stix_idx_09.db  03.1.stix_idx_21.db
+# 02.1.data.09  02.1.data.21  03.1.giggle_idx_09     03.1.giggle_idx_21  03.1.meta.ped.09  03.1.meta.ped.21  03.1.stix_idx_10.db  03.1.stix_idx_22.db
+# 02.1.data.10  02.1.data.22  03.1.giggle_idx_10     03.1.giggle_idx_22  03.1.meta.ped.10  03.1.meta.ped.22  03.1.stix_idx_11.db
+```
+it's flat.
+- bed_dir_i,giggle_dir_i,ped_file_i,peddb_i all live in a single dir.
+
+- started working on this ...
+  - /data/jake/stix/src/data2shards.py
+  - but, i realize it's probably best to index normal and tumor separately.
+  - need to partition out tumor/normal before making the shards
+
+```
+./split_tumor_normal.py \
+  --indir /data/jake/genefusion/data/dna_pad/prostate/beds_sort_cln \
+  --outdir_normal ./prostate_normal \
+  --outdir_tumor ./prostate_tumor
+```
+
+# 12-22-25
+
+## goal 1: cosmic tsv -> vcf
+
+- see /data/jake/stix-lr/results/2025_12-cosmic_vcf_verification/run.sh
+for making vcf from cosmic tsv
+
+## goal 2: run svafotate on cosmic vcf
+- see /data/jake/stix-lr/results/2025_12-cosmic-svafotate/run.sh
+for svafotate cosmic results
+
+## goal 3: run stix lr on cosmic vcf
+- 
+
+## summary
+- tsv -> vcf still incorrect, try using just the one column chr6:g.110995633_111964465inv
+for parsing instead.
+
+## next steps
+- try again to tsv -> vcf cosmic
+
 # 12-21-25
+
+
 
 ## goal 1: get a txt file of colo somatic svs with 0/0 gt
 
@@ -74,8 +277,38 @@ for applying somatic/germline filters and getting the sample counts
 - see /data/jake/stix-lr/results/2025_12-colo_all-filtered/run.sh
 colo_filtered_stix_lr_svafotate_results.tar.gz
 
+## goal 7: get counts of germline V merge and somatic V somatic filt
+- germline v merge
+```
+# germline
+wc -l /data/jake/stix-lr/results/2025_12-colo-filtered/colo829_germline.vcf
+# 30545
+# merge
+wc -l /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_merge_grch38.vcf
+# 30599
+```
+- diff is 54
+
+- somatic v filt
+```
+# filt
+grep -v "^#" /data/jake/stix-lr/results/2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf | wc -l
+# 46
+# original
+grep -v "^#" /data/jake/stix-lr/data/2025_11-colo_sv_calls/colo829_benchmark_grch38.vcf | wc -l
+# 54
+```
+
+
+
 
 ## summary
+- identified colo somatic svs with GT=0/0
+- identified somatic sv ids in the merge file
+- filtered out somatic svs in merge file by region
+- filtered out somatic colo svs with GT=0/0
+- produced final colo filtered colo results for svafotate and stix lr
+
 
 
 
