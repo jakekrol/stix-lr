@@ -3,6 +3,8 @@
 # set -euo pipefail
 t_0=$(date +%s)
 
+NEEDLR_POPFREQ_COL=43
+
 # paths
 export TMPDIR=/data/jake/tmp
 TIMEFILE=$(realpath ./needLR_run_time.tsv)
@@ -11,7 +13,8 @@ TIMEFILE=$(realpath ./needLR_run_time.tsv)
 NEEDLR_GRCH38_REFERENCE=/data/jake/needLR/needLR_v3.5_local/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 # dir of needlr install
 dirneedlr="/data/jake/needLR/needLR_v3.5_local"
-OUTDIR=$(pwd)
+OUTDIR="$(pwd)"/needlr_out-$(date +%Y%m%d_%H%M%S)
+mkdir -p $OUTDIR
 DIRORIGIN=$(pwd)
 # echo all the paths
 echo "# TMPDIR: $TMPDIR"
@@ -31,7 +34,7 @@ fi
 echo "# finding colo829 vcfs"
 somatic=../2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf
 germline=../2025_12-colo-filtered/colo829_germline.vcf
-cp $somatic $germline $OUTDIR
+cp $somatic $germline $DIRORIGIN
 somatic=$(basename $somatic)
 germline=$(basename $germline)
 
@@ -62,11 +65,19 @@ for f in $germline $somatic; do
     t_e=$(date +%s)
     run_time=$((t_e - t_s))
     # move result
-    mv $dirneedlr/needLR_output/* $OUTDIR
+    mv --no-clobber $dirneedlr/needLR_output/* $OUTDIR
     printf "$f\t$run_time\n" >> $TIMEFILE
     # go back to origin dir
     cd $DIRORIGIN || { echo "Could not change to origin directory $DIRORIGIN"; exit 1; }
 done
+
+echo "# extracting pop freqs from needLR results"
+# germline
+g=$(find $OUTDIR -path "*germline*" -type f -name "*RESULTS.txt")
+tail -n +2 $g | cut -f $NEEDLR_POPFREQ_COL > colo_needlr_germline_popfreqs.txt
+# somatic
+s=$(find $OUTDIR -path "*somatic*" -type f -name "*RESULTS.txt")
+tail -n +2 $s | cut -f $NEEDLR_POPFREQ_COL > colo_needlr_somatic_popfreqs.txt
 
 t_1=$(date +%s)
 t_total=$((t_1 - t_0))
