@@ -1,2 +1,4 @@
 *.vcf.gz
+needlr_out*
 *.vcf.gz.tbi
+*.vcf
