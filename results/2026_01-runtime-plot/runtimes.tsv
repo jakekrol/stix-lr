@@ -1,0 +1,30 @@
+dataset_method	runtime
+colo|somatic|svafotate;ov=0.8	179.0
+colo|somatic|svafotate;ov=0.7	179.0
+hg002 cmrg|svafotate;ov=0.8	179.0
+colo|somatic|svafotate;ov=0.5	180.0
+colo|somatic|svafotate;ov=0.9	181.0
+colo|somatic|svafotate;ov=0.6	181.0
+hg002 cmrg|svafotate;ov=0.9	181.0
+hg002 cmrg|svafotate;ov=0.6	182.0
+hg002 cmrg|svafotate;ov=0.7	182.0
+hg002 cmrg|svafotate;ov=0.5	186.0
+colo|somatic|stix-lr;mr=1	213.0
+colo|somatic|stix-lr;mr=5	243.0
+colo|germline|svafotate;ov=0.9	413.0
+colo|germline|svafotate;ov=0.6	413.0
+colo|germline|svafotate;ov=0.8	415.0
+colo|germline|svafotate;ov=0.7	417.0
+colo|germline|svafotate;ov=0.5	417.0
+colo|somatic|needlr	627.0
+hg002 cmrg|needlr	630.0
+colo|germline|needlr	1134.0
+hg002 cmrg|stix-lr;mr=5	1590.0
+hg002 cmrg|stix-lr;mr=1	1595.0
+cosmic|svafotate;ov=0.5	7143.0
+cosmic|svafotate;ov=0.7	7185.0
+cosmic|svafotate;ov=0.8	7231.0
+cosmic|svafotate;ov=0.6	7273.0
+cosmic|svafotate;ov=0.9	7332.0
+cosmic|needlr	47411.0
+colo|germline|stix-lr;mr=1	333113.0
