@@ -73,7 +73,7 @@ cat <(cut -f1 $needlr_germline | sed 's|$|\t0|') \
 # plot
 $script --scores "${stix_mr1_comb},${stix_mr5_comb},${svafotate_ov05_comb},${svafotate_ov06_comb},${svafotate_ov07_comb},${svafotate_ov08_comb},${svafotate_ov09_comb},${needlr_comb}" \
     --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
-    --output stix_lr_vs_svafotate-colo-roc.png \
+    --output colo-stix_lr-svafotate-need_lr-roc.png \
     --flip \
     --title "COLO829 somatic SV classification"
 
