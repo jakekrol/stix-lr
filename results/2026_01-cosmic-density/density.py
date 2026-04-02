@@ -106,6 +106,10 @@ def main():
             )
     else:
         names = None
+    print("Input files and labels:")
+    for idx, path in enumerate(input_paths):
+        label = names[idx] if names is not None else os.path.basename(path)
+        print(f"  {idx+1}. {label}: {path}")
 
     datasets = []
     labels = []
@@ -113,6 +117,7 @@ def main():
     nonzero_datasets = []
 
     for idx, path in enumerate(input_paths):
+        print(f"Loading data from '{path}'...")
         v = load_values(path)
         datasets.append(v)
         labels.append(names[idx] if names is not None else os.path.basename(path))
