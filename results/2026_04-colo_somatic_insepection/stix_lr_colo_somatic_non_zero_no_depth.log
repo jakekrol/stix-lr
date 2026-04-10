@@ -1,0 +1,4 @@
+# stix -t INS -B shardfile.txt -s 500 -c 5 -L 54 -l 7:75595250-75595250 -r 7:75595250-75595304  > /data/jake/stix-lr/results/2026_04-colo_somatic_insepection/COLO829_SOMATIC_SV13_INS.stix #	5s
+# stix -t INS -B shardfile.txt -s 500 -c 5 -L 2397 -l 14:34545553-34545553 -r 14:34545553-34547950  > /data/jake/stix-lr/results/2026_04-colo_somatic_insepection/COLO829_SOMATIC_SV34_INS.stix #	7s
+# stix -t INS -B shardfile.txt -s 500 -c 5 -L 11260 -l 1:236097142-236097142 -r 1:236097142-236108402  > /data/jake/stix-lr/results/2026_04-colo_somatic_insepection/COLO829_SOMATIC_SV4_INS.stix #	12s
+# SUCCESS

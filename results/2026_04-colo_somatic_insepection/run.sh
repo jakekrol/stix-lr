@@ -48,3 +48,25 @@ for d in "${depthfiles[@]}"; do
         hist.py -o $d.hist.png --bins 10 --xlabel "Sample depth" --ylabel "Frequency" \
             --title "$svid" --ylog
 done
+
+# query again, but not the sample depth
+
+echo "# stix query for non-depth info"
+sed 's|\.depths||' colo_somatic_non_zero.stix_query.tsv > colo_somatic_non_zero.stix_query_no_depth.query.tsv
+logfile=$(realpath "stix_lr_colo_somatic_non_zero_no_depth.log")
+input=$(realpath "colo_somatic_non_zero.stix_query_no_depth.query.tsv")
+(
+    cd "$index" || { echo "Error: Could not change to directory $index"; exit 1; }
+    tail -n +2 $input | \
+        gargs -p 3 --log=$logfile \
+            "stix -t {6} -B shardfile.txt -s 500 -c 5 -L {7} -l {1}:{2}-{3} -r {1}:{4}-{5}  > $dirout/{8}"
+)
+
+# get top 3 1000G samples with highest depth
+mapfile -t stixfiles < <(ls *.stix)
+for f in "${stixfiles[@]}"; do
+    svid="$(echo $f | cut -f 1 -d'.')"
+    grep "1000g" $f | \
+        sort -k8 -nr | \
+        head -n 3 > $svid.top_1000g_samples.tsv
+done
