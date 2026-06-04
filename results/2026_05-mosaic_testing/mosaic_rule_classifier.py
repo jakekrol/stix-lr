@@ -19,13 +19,13 @@ def get_args():
                         default=0.2)
     parser.add_argument('--mosaic_region_saf_lower_bound',
                         type=float,
-                        default=0.05)
+                        default=0.2)
     parser.add_argument('--mosaic_region_saf_upper_bound',
                         type=float,
-                        default=0.45)
+                        default=0.4)
     parser.add_argument('--high_saf_density_upper_bound',
                         type=float,
-                        default=0.2)
+                        default=1.0)
     parser.add_argument('--output', '-o',
                         type=str,
                         default='mosaic_classification.tsv')
