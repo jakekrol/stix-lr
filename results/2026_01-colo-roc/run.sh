@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# plot script
+# see github.com/jakekrol/rl-tools/plot/roc.py
 script=/data/jake/rl-tools/plot/roc.py
 
 # combine germline/somatic file pairs
