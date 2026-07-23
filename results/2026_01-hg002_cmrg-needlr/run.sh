@@ -67,7 +67,6 @@ f=$(find $OUTDIR -type f -name "*RESULTS.txt")
 tail -n +2 $f | cut -f $NEEDLR_POPFREQ_COL > hg002_needlr_popfreqs.txt
 sort -gn hg002_needlr_popfreqs.txt > xyz && mv xyz hg002_needlr_popfreqs.txt
 
-# count number of SVs with population frequency zero
 n_svs=$(wc -l hg002_needlr_popfreqs.txt | cut -d' ' -f1)
 script='n_pop_freq_non_zero_svs=0
 with open("hg002_needlr_popfreqs.txt") as f:
