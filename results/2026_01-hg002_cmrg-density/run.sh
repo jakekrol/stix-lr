@@ -19,7 +19,7 @@ hg002_svafotate_ov07=$dir_hg002_svafotate/svafotate-hg002-cmrg-overlap_0.7_maxpo
 hg002_svafotate_ov08=$dir_hg002_svafotate/svafotate-hg002-cmrg-overlap_0.8_maxpopfreq.txt
 hg002_svafotate_ov09=$dir_hg002_svafotate/svafotate-hg002-cmrg-overlap_0.9_maxpopfreq.txt
 ### needlr
-dir_hg002_needlr=../2026_01-hg002-needlr
+dir_hg002_needlr=../2026_01-hg002_cmrg-needlr
 hg002_needlr=$dir_hg002_needlr/hg002_needlr_popfreqs.txt
 
 # transform stix sample counts to population frequencies
