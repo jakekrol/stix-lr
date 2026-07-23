@@ -1,1 +1,3 @@
 needlr_out*/
+*.vcf.gz
+*.vcf.gz.tbi
