@@ -65,7 +65,24 @@ done
 
 f=$(find $OUTDIR -type f -name "*RESULTS.txt")
 tail -n +2 $f | cut -f $NEEDLR_POPFREQ_COL > hg002_needlr_popfreqs.txt
+sort -gn hg002_needlr_popfreqs.txt > xyz && mv xyz hg002_needlr_popfreqs.txt
+
+# count number of SVs with population frequency zero
+n_svs=$(wc -l hg002_needlr_popfreqs.txt | cut -d' ' -f1)
+script='n_pop_freq_non_zero_svs=0
+with open("hg002_needlr_popfreqs.txt") as f:
+    for line in f:
+        if float(line.strip()) > 0.0:
+            n_pop_freq_non_zero_svs += 1
+print(n_pop_freq_non_zero_svs)
+'
+n_svs_non_zero_pop_freq=$(python3 -c "$script")
+recall=$(calc $n_svs_non_zero_pop_freq / $n_svs)
+recall=$(calc ${recall}*100)
+recall=$(echo "${recall} %")
+echo "$recall" > hg002_needlr_recall.txt
 
 t_1=$(date +%s)
 t_total=$((t_1 - t_0))
 echo "# done. total time $t_total seconds"
+
