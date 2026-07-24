@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # see github.com/jakekrol/rl-tools/plot/density.py
-script=./density.py
+script=./density_and_zero_bar.py
 # num samples in stix lr index to normalize counts in to frequencies
 POPSIZE=1108
 
@@ -38,10 +38,9 @@ done
 
 # plot density distributions
 python $script \
-    --figsize 10 5 \
+    --figsize 6 5 \
     --inputs "cosmic-stix_lr-min_read1-popfreqs.txt,cosmic-stix_lr-min_read5-popfreqs.txt,cosmic-svafotate-ov05-popfreqs.txt,cosmic-svafotate-ov06-popfreqs.txt,cosmic-svafotate-ov07-popfreqs.txt,cosmic-svafotate-ov08-popfreqs.txt,cosmic-svafotate-ov09-popfreqs.txt,$cosmic_needlr" \
     --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
-    --title "COSMIC SV Population Frequency Distributions" \
     --xlabel "" \
     --ylabel_density "Population frequency" \
     --output "cosmic-sv-popfreq-density.png" \

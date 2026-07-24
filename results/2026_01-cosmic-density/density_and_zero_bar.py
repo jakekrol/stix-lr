@@ -21,12 +21,7 @@ p.add_argument(
     "-o",
     "--output",
     required=True,
-    help="Output image file (e.g. density.png).",
-)
-p.add_argument(
-    "--title",
-    default="Density / Violin plots",
-    help="Plot title.",
+    help="Base output image file name (used as prefix for the two plots).",
 )
 p.add_argument(
     "--names",
@@ -62,7 +57,7 @@ p.add_argument(
 )
 p.add_argument(
     "--ylabel_bar",
-    default="# SVs with 0 population frequency",
+    default="Num. SVs with 0 population frequency",
     help="Y-axis label for bar plot."
 )
 p.add_argument(
@@ -74,6 +69,16 @@ p.add_argument(
     "--show_median",
     action="store_true",
     help="Show median line in violin plots.",
+)
+p.add_argument(
+    "--title_bar", 
+    default="COSMIC SVs",
+    help="Title for the bar plot."
+)
+p.add_argument(
+    "--title_violin", 
+    default="COSMIC SVs",
+    help="Title for the violin plot."
 )
 
 
@@ -148,21 +153,41 @@ def main():
         ax.set_xticklabels(labels, rotation=45, ha="right")
         ax.set_xlabel(args.xlabel)
 
-    fig, (ax_bar, ax_violin) = plt.subplots(1, 2, figsize=tuple(args.figsize))
+    # save bar plot separately
+    bar_output = args.output if args.output.endswith((".png", ".pdf", ".svg")) else f"{args.output}_bar.png"
+    if not bar_output.endswith((".png", ".pdf", ".svg")):
+        bar_output = f"{bar_output}_bar.png"
 
+    violin_output = args.output if args.output.endswith((".png", ".pdf", ".svg")) else f"{args.output}_violin.png"
+    if not violin_output.endswith((".png", ".pdf", ".svg")):
+        violin_output = f"{violin_output}_violin.png"
+
+    if bar_output == violin_output:
+        bar_output = f"{os.path.splitext(args.output)[0]}_bar.png"
+        violin_output = f"{os.path.splitext(args.output)[0]}_violin.png"
+
+    fig_bar, ax_bar = plt.subplots(figsize=(6, 5))
+    ax_bar.set_title(args.title_bar, loc='left')
     x = np.arange(len(labels))
     ax_bar.bar(x, zero_counts)
     ax_bar.set_xticks(x)
     ax_bar.set_xticklabels(labels, rotation=45, ha="right")
     ax_bar.set_ylabel(args.ylabel_bar)
+    ax_bar.spines["top"].set_visible(False)
+    ax_bar.spines["right"].set_visible(False)
+    fig_bar.tight_layout()
+    fig_bar.savefig(bar_output, dpi=300)
+    plt.close(fig_bar)
 
+    fig_violin, ax_violin = plt.subplots(figsize=(6, 5))
+    ax_violin.set_title(args.title_violin, loc='left')
     draw_violins(ax_violin)
     ax_violin.set_ylabel(args.ylabel_density)
-
-    fig.suptitle(args.title)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
-
-    plt.savefig(args.output, dpi=300)
+    ax_violin.spines["top"].set_visible(False)
+    ax_violin.spines["right"].set_visible(False)
+    fig_violin.tight_layout()
+    fig_violin.savefig(violin_output, dpi=300)
+    plt.close(fig_violin)
 
 
 if __name__ == "__main__":

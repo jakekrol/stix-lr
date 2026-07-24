@@ -1,3 +1,5 @@
 needlr_out*/
 *.vcf.gz
 *.vcf.gz.tbi
+bed_in
+bed_out
