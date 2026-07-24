@@ -81,6 +81,13 @@ recall=$(calc ${recall}*100)
 recall=$(echo "${recall} %")
 echo "$recall" > hg002_needlr_recall.txt
 
+# bed
+../../src/needlrout2bed.py -i $f -o hg002_cmrg_needlr_popfreqs.bed
+mkdir -p bed_in bed_out
+mv hg002_cmrg_needlr_popfreqs.bed bed_in
+../../src/sort_bed bed_in bed_out 4
+gunzip -c bed_out/hg002_cmrg_needlr_popfreqs.bed.gz > hg002_cmrg_needlr_popfreqs.bed
+
 t_1=$(date +%s)
 t_total=$((t_1 - t_0))
 echo "# done. total time $t_total seconds"

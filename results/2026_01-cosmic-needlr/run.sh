@@ -66,6 +66,13 @@ done
 f=$(find $OUTDIR -type f -name "*RESULTS.txt")
 tail -n +2 $f | cut -f $NEEDLR_POPFREQ_COL > cosmic_needlr_popfreqs.txt
 
+../../src/needlrout2bed.py -i $f -o cosmic_needlr_popfreqs.bed
+mkdir -p bed_in bed_out
+mv cosmic_needlr_popfreqs.bed bed_in/cosmic_needlr_popfreqs.bed
+../../src/sort_bed bed_in bed_out 4
+gunzip -c bed_out/cosmic_needlr_popfreqs.bed.gz > cosmic_needlr_popfreqs.bed
+
+
 t_1=$(date +%s)
 t_total=$((t_1 - t_0))
 echo "# done. total time $t_total seconds"
