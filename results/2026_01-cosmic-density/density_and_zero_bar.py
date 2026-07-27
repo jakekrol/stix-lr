@@ -24,6 +24,16 @@ p.add_argument(
     help="Base output image file name (used as prefix for the two plots).",
 )
 p.add_argument(
+    "--output_medians",
+    default="medians.tsv",
+    help="Output file for median values.",
+)
+p.add_argument(
+    "--output_nonzero_fractions",
+    default="nonzero_fractions.tsv",
+    help="Output file for non-zero fractions.",
+)
+p.add_argument(
     "--names",
     help=(
         "Optional comma-separated list of display names for each input file. "
@@ -120,6 +130,8 @@ def main():
     labels = []
     zero_counts = []
     nonzero_datasets = []
+    nonzero_medians = []
+    nonzero_fractions = []
 
     for idx, path in enumerate(input_paths):
         print(f"Loading data from '{path}'...")
@@ -127,7 +139,10 @@ def main():
         datasets.append(v)
         labels.append(names[idx] if names is not None else os.path.basename(path))
         zero_counts.append(int((v == 0).sum()))
-        nonzero_datasets.append(v[v != 0])
+        nonzero_vals = v[v != 0]
+        nonzero_datasets.append(nonzero_vals)
+        nonzero_medians.append(float(np.median(nonzero_vals)) if len(nonzero_vals) > 0 else np.nan)
+        nonzero_fractions.append(len(nonzero_vals) / len(v) if len(v) > 0 else np.nan)
 
     def draw_violins(ax):
         pos = np.arange(1, len(labels) + 1)
@@ -188,6 +203,15 @@ def main():
     fig_violin.tight_layout()
     fig_violin.savefig(violin_output, dpi=300)
     plt.close(fig_violin)
+
+    with open(args.output_medians, "w") as fh:
+        fh.write("tool\tmedian_nonzero\n")
+        for label, median in zip(labels, nonzero_medians):
+            fh.write(f"{label}\t{median}\n")
+    with open(args.output_nonzero_fractions, "w") as fh:
+        fh.write("tool\tnonzero_fraction\n")
+        for label, fraction in zip(labels, nonzero_fractions):
+            fh.write(f"{label}\t{fraction}\n")
 
 
 if __name__ == "__main__":

@@ -83,7 +83,7 @@ python ./new_roc.py \
     --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
     --output colo-stix_lr-svafotate-need_lr-new_roc.png \
     --flip \
-    --title "COLO829 somatic SV classification"
+    --title "COLO829(BL) SVs"
 
 
 

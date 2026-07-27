@@ -17,10 +17,18 @@ outdir_cosmic='./cosmic_split'
 outdir_colo_somatic='./colo_somatic_split'
 outdir_colo_germline='./colo_germline_split'
 mkdir -p "$outdir_hg002" "$outdir_hg002_cmrg" "$outdir_cosmic" "$outdir_colo_somatic" "$outdir_colo_germline"
-echo "Splitting VCF files into individual variant records..."
+echo "# splitting hg002 VCF into separate files"
 python3 -c "from jkbiolib.variant.vcf import split_vcf; \
-split_vcf('$vcf_hg002', '$outdir_hg002'); \
-split_vcf('$vcf_hg002_cmrg', '$outdir_hg002_cmrg'); \
-split_vcf('$vcf_cosmic', '$outdir_cosmic'); \
-split_vcf('$vcf_colo_somatic', '$outdir_colo_somatic'); \
+split_vcf('$vcf_hg002', '$outdir_hg002');"
+echo "# splitting hg002 cmrg VCF into separate files"
+python3 -c "from jkbiolib.variant.vcf import split_vcf; \
+split_vcf('$vcf_hg002_cmrg', '$outdir_hg002_cmrg');"
+echo "# splitting cosmic VCF into separate files"
+python3 -c "from jkbiolib.variant.vcf import split_vcf; \
+split_vcf('$vcf_cosmic', '$outdir_cosmic');"
+echo "# splitting colo somatic VCF into separate files"
+python3 -c "from jkbiolib.variant.vcf import split_vcf; \
+split_vcf('$vcf_colo_somatic', '$outdir_colo_somatic');"
+echo "# splitting colo germline VCF into separate files"
+python3 -c "from jkbiolib.variant.vcf import split_vcf; \
 split_vcf('$vcf_colo_germline', '$outdir_colo_germline');"

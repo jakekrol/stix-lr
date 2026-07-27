@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # see github.com/jakekrol/rl-tools/plot/density.py
-script=/data/jake/rl-tools/plot/density.py
+script=./density.py
 # num samples in stix lr index to normalize counts in to frequencies
 POPSIZE=1108
 
@@ -39,10 +39,10 @@ done
 
 # plot density distributions
 python $script \
-    --figsize 10 5 \
+    --figsize 6 5 \
     --inputs "hg002-stix_lr-min_read1-popfreqs.txt,hg002-stix_lr-min_read5-popfreqs.txt,hg002-svafotate-ov05-popfreqs.txt,hg002-svafotate-ov06-popfreqs.txt,hg002-svafotate-ov07-popfreqs.txt,hg002-svafotate-ov08-popfreqs.txt,hg002-svafotate-ov09-popfreqs.txt,$hg002_needlr" \
     --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
-    --title "HG002 CMRG SV Population Frequency Distributions" \
+    --title "HG002 CMRG SVs" \
     --xlabel "" \
     --ylabel "Population frequency" \
     --show_median \

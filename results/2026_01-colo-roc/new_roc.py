@@ -134,7 +134,7 @@ def main():
     ax.set_xlabel("False Positive Rate", fontsize=args.axis_labelsize)
     ax.set_ylabel("True Positive Rate", fontsize=args.axis_labelsize)
     if args.title:
-        ax.set_title(args.title, fontsize=args.title_fontsize)
+        ax.set_title(args.title, fontsize=args.title_fontsize, loc='left')
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.legend(

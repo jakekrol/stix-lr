@@ -22,17 +22,17 @@ def get_args():
                         default=0.2)
     parser.add_argument('--mosaic_region_saf_upper_bound',
                         type=float,
-                        default=0.4)
+                        default=1.0)
     parser.add_argument('--high_saf_density_upper_bound',
                         type=float,
                         default=1.0)
     parser.add_argument('--output', '-o',
                         type=str,
                         default='mosaic_classification.tsv')
-    parser.add_argument('--cpus',
-                        type=int,
-                        default=1,
-                        help='Number of CPUs to use (default 1)')
+    # parser.add_argument('--cpus',
+    #                     type=int,
+    #                     default=1,
+    #                     help='Number of CPUs to use (default 1)')
     return parser.parse_args()
 
 def mosaic_region_density(x, lower, upper):
@@ -78,7 +78,7 @@ def main():
                 mosaic_density = mosaic_region_density(safs, args.mosaic_region_saf_lower_bound, args.mosaic_region_saf_upper_bound)
                 high_saf_density_value = high_saf_density(safs, args.high_saf_density_upper_bound)
                 classification = classify(mosaic_density, high_saf_density_value, args.mosaic_region_density_lower_bound, args.high_saf_density_upper_bound)
-                print('\t'.join([sv_key] + line.split('\t')[:args.sample_col] + [str(mosaic_density), str(high_saf_density_value), classification]) + '\n', file=out)
+                print('\t'.join([sv_key] + line.split('\t')[:args.sample_col] + [str(mosaic_density), str(high_saf_density_value), classification]), file=out)
 
     
 
