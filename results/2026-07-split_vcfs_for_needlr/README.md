@@ -1,0 +1,1 @@
+split all vcfs into 1 variant per file because needlr does not retain svids
