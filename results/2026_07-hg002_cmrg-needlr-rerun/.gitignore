@@ -1,0 +1,6 @@
+in_vcfs/*
+out/*
+gargs.input
+gargs.log
+vcfs.txt
+outdirs.txt
