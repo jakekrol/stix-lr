@@ -27,7 +27,11 @@ echo "# getting somatic merge IDs overlapping somatic regions"
 bcftools view -R somatic_regions_no_bnd.bed "$input_merge".gz | \
     bcftools query -f '%ID\n' > somatic_merge_ids.txt
 
+
+
 echo "# filtering merge file to exclude somatic SV IDs"
 bcftools view --exclude 'ID=@somatic_merge_ids.txt' "$input_merge" -o colo829_germline.vcf -O v
 
 
+sed -i '36a\
+##INFO=<ID=AF,Number=1,Type=Float,Description="Allele Frequency">' $output_somatic_filt
