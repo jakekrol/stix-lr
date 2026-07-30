@@ -6,22 +6,30 @@ OVERLAPS=(0.5 0.7 0.9)
 SCRIPT_GET_POP_FREQ=/data/jake/needLR-fork/src/annotate_collapsed_variants.py
 OUTFILE_POPFREQ="needlr_pop_freq.tsv"
 VCF_IN=../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.END.vcf.gz
-cp $VCF_IN $(pwd)
+cp $VCF_IN $(pwd) # not necessary
+# needLR names outdirs based on input vcf name
+DIR_NEEDLR_OUT=$(basename $VCF_IN)
+DIR_NEEDLR_OUT="${DIR_NEEDLR_OUT%.vcf.gz}_needLR_1kg_v4.0"
 
 for overlap in "${OVERLAPS[@]}"; do
-    DIR_NEEDLR_OUT=needLR_ov${overlap}
-    OUT_TIME=needLR_ov${overlap}.time.txt
-    mkdir -p $DIR_NEEDLR_OUT
-    echo "# needLR with truvari overlap ${overlap} to outdir $DIR_NEEDLR_OUT"
-    t_0=$(date +%s)
-    needLR annotate -O $DIR_NEEDLR_OUT -o $overlap $VCF_IN
-    t_1=$(date +%s)
-    echo "$((t_1-t_0)) seconds" > $OUT_TIME
-    $SCRIPT_GET_POP_FREQ \
-        --input_vcf "$VCF_IN" \
-        --collapsed_vcf "$DIR_NEEDLR_OUT/*/*_truvari_collapsed_variants.vcf" \
-        --table $DIR_NEEDLR_OUT/*/*RESULTS.tsv \
-        --out "$DIR_NEEDLR_OUT/$OUTFILE_POPFREQ"
+    dir_overlap_out="needLR_ov${overlap}"
+    mkdir -p ${dir_overlap_out}
+    out_time=needLR_ov${overlap}.time.txt
+    dir_out="${dir_overlap_out}/${DIR_NEEDLR_OUT}"
+
+    # echo "# needLR with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
+    # t_0=$(date +%s)
+    # needLR annotate -O ${dir_overlap_out} -o ${overlap} ${VCF_IN}
+    # t_1=$(date +%s)
+    # echo "$((t_1-t_0)) seconds" > ${out_time}
+
+    collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
+    needlr_table=$(find ${dir_out} -type f -iname "*RESULTS.tsv")
+    ${SCRIPT_GET_POP_FREQ} \
+        --input_vcf "${VCF_IN}" \
+        --collapsed_vcf "${collapsed_vcf}" \
+        --table "${needlr_table}" \
+        --out "${dir_overlap_out}/${OUTFILE_POPFREQ}"
 done
 
 
