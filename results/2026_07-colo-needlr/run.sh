@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # ! conda activate needLR-4.0-cyvcf2 before running
+# ! source jkbiolib
 # ! make sure to use needLR fork
 
 OVERLAPS=(0.5 0.7 0.9)
@@ -13,6 +14,8 @@ for vcf in $vcf_somatic $vcf_germline; do
     cp $vcf $(pwd)
     vcf=$(basename $vcf)
     echo "# fixing VCF headers, bgzipping and indexing $vcf"
+    # rm BND variants
+    grep -v "BND" $vcf > ${vcf}.tmp && mv ${vcf}.tmp $vcf
     # Add AF field and fix END type from String to Integer
     sed -i '32i##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency">' $vcf
     sed -i 's/ID=END,Number=1,Type=String/ID=END,Number=1,Type=Integer/' $vcf
@@ -42,14 +45,15 @@ for overlap in "${OVERLAPS[@]}"; do
     echo "$((t_1-t_0)) seconds" > ${out_time}
 
     collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
-    needlr_table=$(find ${dir_out} -type f -iname "*RESULTS.tsv")
+    merged_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapse_out.vcf")
+    echo "# annotating needlr popfreqs with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
     ${SCRIPT_GET_POP_FREQ} \
         --input_vcf "${vcf_somatic}" \
         --collapsed_vcf "${collapsed_vcf}" \
-        --table "${needlr_table}" \
+        --merged_vcf "${merged_vcf}" \
         --out "${dir_overlap_out}/${OUTFILE_POPFREQ}"
     unset collapsed_vcf
-    unset needlr_table
+    unset merged_vcf
 done
 
 ### germline
@@ -70,14 +74,15 @@ for overlap in "${OVERLAPS[@]}"; do
     echo "$((t_1-t_0)) seconds" > ${out_time}
 
     collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
-    needlr_table=$(find ${dir_out} -type f -iname "*RESULTS.tsv")
+    merged_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapse_out.vcf")
+    echo "# annotating needlr popfreqs with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
     ${SCRIPT_GET_POP_FREQ} \
         --input_vcf "${vcf_germline}" \
         --collapsed_vcf "${collapsed_vcf}" \
-        --table "${needlr_table}" \
+        --merged_vcf "${merged_vcf}" \
         --out "${dir_overlap_out}/${OUTFILE_POPFREQ}"
     unset collapsed_vcf
-    unset needlr_table
+    unset merged_vcf
 done
 
 
