@@ -1,0 +1,1 @@
+tier 1 hg002 svs, len >=50, from Ryan over slack
