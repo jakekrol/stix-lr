@@ -1,6 +1,0 @@
-*.vcf
-*.tbi
-*.gz
-needlr_out*
-bed_in
-bed_out
