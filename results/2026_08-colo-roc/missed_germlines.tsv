@@ -1,0 +1,9 @@
+file	num_zero_popfreq_germline
+stix_lr-colo-roc-min_read_1.tsv	.0001
+stix_lr-colo-roc-min_read_5.tsv	.0574
+svafotate-colo-roc-overlap_0.5.tsv	.6462
+svafotate-colo-roc-overlap_0.7.tsv	.7004
+svafotate-colo-roc-overlap_0.9.tsv	.7422
+needlr_ov05_comb.tsv	.2635
+needlr_ov07_comb.tsv	.3926
+needlr_ov09_comb.tsv	.5165
