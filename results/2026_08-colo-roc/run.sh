@@ -3,6 +3,8 @@
 # see github.com/jakekrol/rl-tools/plot/roc.py
 script=/data/jake/rl-tools/plot/roc.py
 
+FILL_MISSING_NEEDLR=0
+
 # combine germline/somatic file pairs
 
 ### stix
@@ -46,41 +48,64 @@ svafotate_ov07_comb=svafotate-colo-roc-overlap_0.7.tsv
 svafotate_ov08_comb=svafotate-colo-roc-overlap_0.8.tsv
 svafotate_ov09_comb=svafotate-colo-roc-overlap_0.9.tsv
 
-overlaps=(05 06 07 08 09)
+# overlaps=(05 06 07 08 09)
+overlaps=(05 07 09)
 for x in "${overlaps[@]}"; do
     germline_var="svafotate_ov${x}_germline"
     somatic_var="svafotate_ov${x}_somatic"
     comb_var="svafotate_ov${x}_comb"
-    # ${!x} syntax means we treat the value of x as a variable name and get its value
+    # ${!x} syntax means we treat the value of VAR as a variable name and get its value
     # here we get the file paths stored in those variable names
     cat <(cut -f1 ${!germline_var} | sed 's|$|\t0|') \
         <(cut -f1 ${!somatic_var} | sed 's|$|\t1|') \
         > ${!comb_var}
 done
 
+for x in "${overlaps[@]}"; do
+    comb_var="svafotate_ov${x}_comb"
+    echo "Combined SVAFotate overlap 0.${x} germline/somatic file: ${!comb_var}"
+done
+
 ### needlr
-dir_needlr=../2026_01-colo-needlr
+dir_needlr=../2026_07-colo-needlr
 ## germline
-needlr_germline="${dir_needlr}/colo_needlr_germline_popfreqs.txt"
+needlr_germline_05="${dir_needlr}/germline_needLR_ov0.5/needlr_pop_freq.tsv"
+needlr_germline_07="${dir_needlr}/germline_needLR_ov0.7/needlr_pop_freq.tsv"
+needlr_germline_09="${dir_needlr}/germline_needLR_ov0.9/needlr_pop_freq.tsv"
+
 ## somatic
-needlr_somatic="${dir_needlr}/colo_needlr_somatic_popfreqs.txt"
+needlr_somatic_05="${dir_needlr}/somatic_needLR_ov0.5/needlr_pop_freq.tsv"
+needlr_somatic_07="${dir_needlr}/somatic_needLR_ov0.7/needlr_pop_freq.tsv"
+needlr_somatic_09="${dir_needlr}/somatic_needLR_ov0.9/needlr_pop_freq.tsv"
 ## combined
-needlr_comb="needlr-colo-roc.tsv"
-cat <(cut -f1 $needlr_germline | sed 's|$|\t0|') \
-    <(cut -f1 $needlr_somatic | sed 's|$|\t1|') \
-    > $needlr_comb
+needlr_comb_05="needlr_ov05_comb.tsv"
+needlr_comb_07="needlr_ov07_comb.tsv"
+needlr_comb_09="needlr_ov09_comb.tsv"
+for x in "${overlaps[@]}"; do
+    germline_var="needlr_germline_${x}"
+    somatic_var="needlr_somatic_${x}"
+    comb_out="needlr_comb_${x}"
+    # ${!x} syntax means we treat the value of VAR as a variable name and get its value
+    # here we get the file paths stored in those variable names
+    cat <(tail -n +2 ${!germline_var} | cut -f2 | sed 's|$|\t0|') \
+        <(tail -n +2 ${!somatic_var} | cut -f2 | sed 's|$|\t1|') \
+        > ${!comb_out}
+    # fill filtered variants (-1) with value
+    sed -i "s|-1|${FILL_MISSING_NEEDLR}|g" ${!comb_out}
+done
+
 
 # plot
-$script --scores "${stix_mr1_comb},${stix_mr5_comb},${svafotate_ov05_comb},${svafotate_ov06_comb},${svafotate_ov07_comb},${svafotate_ov08_comb},${svafotate_ov09_comb},${needlr_comb}" \
-    --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
+$script --scores "${stix_mr1_comb},${stix_mr5_comb},${svafotate_ov05_comb},${svafotate_ov07_comb},${svafotate_ov09_comb},${needlr_comb_05},${needlr_comb_07},${needlr_comb_09}" \
+    --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.7,SVAFotate;OV=0.9,NeedLR;OV=0.5,NeedLR;OV=0.7,NeedLR;OV=0.9" \
     --output colo-stix_lr-svafotate-need_lr-roc.png \
     --flip \
     --title "COLO829 somatic SV classification"
 
 # plot using the new_roc.py formatting
 python ./new_roc.py \
-    --scores "${stix_mr1_comb},${stix_mr5_comb},${svafotate_ov05_comb},${svafotate_ov06_comb},${svafotate_ov07_comb},${svafotate_ov08_comb},${svafotate_ov09_comb},${needlr_comb}" \
-    --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.6,SVAFotate;OV=0.7,SVAFotate;OV=0.8,SVAFotate;OV=0.9,NeedLR" \
+    --scores "${stix_mr1_comb},${stix_mr5_comb},${svafotate_ov05_comb},${svafotate_ov07_comb},${svafotate_ov09_comb},${needlr_comb_05},${needlr_comb_07},${needlr_comb_09}" \
+    --names "STIX-LR;MR=1,STIX-LR;MR=5,SVAFotate;OV=0.5,SVAFotate;OV=0.7,SVAFotate;OV=0.9,NeedLR;OV=0.5,NeedLR;OV=0.7,NeedLR;OV=0.9" \
     --output colo-stix_lr-svafotate-need_lr-new_roc.png \
     --flip \
     --title "COLO829(BL) SVs"
