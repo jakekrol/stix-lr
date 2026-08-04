@@ -3,3 +3,4 @@ needlr_out*
 *.vcf.gz.tbi
 *.vcf
 backup
+*temp.txt

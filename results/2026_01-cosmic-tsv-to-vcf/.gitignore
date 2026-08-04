@@ -1,3 +1,5 @@
 cosmic.tsv
 cosmic.bed
 cosmic.filtered.tsv
+*.gz
+*.tbi

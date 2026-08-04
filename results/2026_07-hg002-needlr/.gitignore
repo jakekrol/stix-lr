@@ -3,3 +3,4 @@ needlr_out*/
 *.vcf.gz.tbi
 bed_in
 bed_out
+*temp.txt

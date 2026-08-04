@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # ! conda activate needLR-4.0-cyvcf2 before running
 # ! make sure to use needLR fork
+# ! source jkbiolib
 
-OVERLAPS=(0.5 0.7 0.9)
+OVERLAPS=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9)
 SCRIPT_GET_POP_FREQ=/data/jake/needLR-fork/src/annotate_collapsed_variants.py
 OUTFILE_POPFREQ="needlr_pop_freq.tsv"
-VCF_IN=../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.AF.addID.vcf.gz
+VCF_IN=../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.END.gt50bp.vcf.gz
 cp $VCF_IN $(pwd) # not necessary
 # needLR names outdirs based on input vcf name
 DIR_NEEDLR_OUT=$(basename $VCF_IN)
@@ -17,18 +18,19 @@ for overlap in "${OVERLAPS[@]}"; do
     out_time=needLR_ov${overlap}.time.txt
     dir_out="${dir_overlap_out}/${DIR_NEEDLR_OUT}"
 
-    echo "# needLR with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
-    t_0=$(date +%s)
-    needLR annotate -O ${dir_overlap_out} -o ${overlap} ${VCF_IN}
-    t_1=$(date +%s)
-    echo "$((t_1-t_0)) seconds" > ${out_time}
+    # echo "# needLR with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
+    # t_0=$(date +%s)
+    # needLR annotate -O ${dir_overlap_out} -o ${overlap} ${VCF_IN}
+    # t_1=$(date +%s)
+    # echo "$((t_1-t_0)) seconds" > ${out_time}
 
     collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
-    needlr_table=$(find ${dir_out} -type f -iname "*RESULTS.tsv")
+    merged_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapse_out.vcf")
+    echo "# annotating needlr popfreqs with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
     ${SCRIPT_GET_POP_FREQ} \
         --input_vcf "${VCF_IN}" \
         --collapsed_vcf "${collapsed_vcf}" \
-        --table "${needlr_table}" \
+        --merged_vcf "${merged_vcf}" \
         --out "${dir_overlap_out}/${OUTFILE_POPFREQ}"
 done
 
