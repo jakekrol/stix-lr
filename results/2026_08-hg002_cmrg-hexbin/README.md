@@ -1,0 +1,1 @@
+hex bin all pairwise tools for hg002 cmrg svs

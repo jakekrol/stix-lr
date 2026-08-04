@@ -125,11 +125,13 @@ $needlr_comb_09
 total_germline_variants=$(awk '$2 == 0' "$stix_mr1_comb" | wc -l)
 echo "# total germline variants: $total_germline_variants"
 missed_germlines="missed_germlines.tsv"
-printf "%s\t%s\n" "file" "num_zero_popfreq_germline" > "$missed_germlines"
+printf "%s\t%s\n" "file" "frac_zero_popfreq_germline" > "$missed_germlines"
 for f in "${files[@]}"; do
-    echo "Counting number of zero population frequencies for germline variants in $f"
+    echo "# counting number of zero population frequencies for germline variants in $f"
     num_zero=$(awk '$2 == 0' "$f" | awk '$1 <= 0.0' | wc -l)
     frac_zero=$(echo "scale=4; $num_zero / $total_germline_variants" | bc)
     printf "%s\t%s\n" "$f" "$frac_zero" >> "$missed_germlines"
 done
+
+./bar-missed_germlines.py
 

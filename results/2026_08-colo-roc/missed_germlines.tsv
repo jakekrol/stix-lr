@@ -1,4 +1,4 @@
-file	num_zero_popfreq_germline
+file	frac_zero_popfreq_germline
 stix_lr-colo-roc-min_read_1.tsv	.0001
 stix_lr-colo-roc-min_read_5.tsv	.0574
 svafotate-colo-roc-overlap_0.5.tsv	.6462
