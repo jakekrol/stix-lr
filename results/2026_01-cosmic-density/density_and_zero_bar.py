@@ -34,6 +34,27 @@ p.add_argument(
     help="Output file for non-zero fractions.",
 )
 p.add_argument(
+    "--output_near_zero_fractions",
+    default="near_zero_fractions.tsv",
+    help="Output file for near-zero fractions.",
+)
+p.add_argument(
+    "--output_zero_fractions",
+    default="zero_fractions.tsv",
+    help="Output file for zero fractions."
+)
+p.add_argument(
+    "--output_nonzero_variannce",
+    default="nonzero_variance.tsv",
+    help="Output file for non-zero variance.",
+)
+p.add_argument(
+    "--near_zero_upper",
+    type=float,
+    default=0.01,
+    help="Upper bound for near-zero values."
+)
+p.add_argument(
     "--names",
     help=(
         "Optional comma-separated list of display names for each input file. "
@@ -67,7 +88,7 @@ p.add_argument(
 )
 p.add_argument(
     "--ylabel_bar",
-    default="Num. SVs with 0 population frequency",
+    default="Num. SVs with population frequency = 0",
     help="Y-axis label for bar plot."
 )
 p.add_argument(
@@ -132,6 +153,9 @@ def main():
     nonzero_datasets = []
     nonzero_medians = []
     nonzero_fractions = []
+    near_zero_fractions = []
+    zero_fractions = []
+    nonzero_variances = []
 
     for idx, path in enumerate(input_paths):
         print(f"Loading data from '{path}'...")
@@ -140,9 +164,13 @@ def main():
         labels.append(names[idx] if names is not None else os.path.basename(path))
         zero_counts.append(int((v == 0).sum()))
         nonzero_vals = v[v != 0]
+        near_zero_vals = v[(v > 0) & (v <= args.near_zero_upper)]
+        near_zero_fractions.append(len(near_zero_vals) / len(v) if len(v) > 0 else np.nan)
+        zero_fractions.append(len(v[v == 0]) / len(v) if len(v) > 0 else np.nan)
         nonzero_datasets.append(nonzero_vals)
         nonzero_medians.append(float(np.median(nonzero_vals)) if len(nonzero_vals) > 0 else np.nan)
         nonzero_fractions.append(len(nonzero_vals) / len(v) if len(v) > 0 else np.nan)
+        nonzero_variances.append(float(np.var(nonzero_vals)) if len(nonzero_vals) > 0 else np.nan)
 
     def draw_violins(ax):
         pos = np.arange(1, len(labels) + 1)
@@ -212,6 +240,18 @@ def main():
         fh.write("tool\tnonzero_fraction\n")
         for label, fraction in zip(labels, nonzero_fractions):
             fh.write(f"{label}\t{fraction}\n")
+    with open(args.output_near_zero_fractions, "w") as fh:
+        fh.write("tool\tnear_zero_fraction\n")
+        for label, fraction in zip(labels, near_zero_fractions):
+            fh.write(f"{label}\t{fraction}\n")
+    with open(args.output_zero_fractions, "w") as fh:
+        fh.write("tool\tzero_fraction\n")
+        for label, fraction in zip(labels, zero_fractions):
+            fh.write(f"{label}\t{fraction}\n")
+    with open(args.output_nonzero_variannce, "w") as fh:
+        fh.write("tool\tnonzero_variance\n")
+        for label, variance in zip(labels, nonzero_variances):
+            fh.write(f"{label}\t{variance}\n")
 
 
 if __name__ == "__main__":
