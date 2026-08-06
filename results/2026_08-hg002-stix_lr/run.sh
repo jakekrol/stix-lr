@@ -29,7 +29,8 @@ done
 
 # get pop frequencies for the stix output
 for mr in "${min_reads[@]}"; do
-    bcftools query -f '%ID\t%INFO/STIX_ONE\n' "${outdir}/hg002-stix_lr-min_read_${mr}.vcf" | sort -k 2,2nr > "${outdir}/hg002-stix_lr-min_read_${mr}.popfreq.tsv"
+    printf "SVID\tSTIX_SAMPLES\n" > "${outdir}/hg002-stix_lr-min_read_${mr}.popfreq.tsv"
+    bcftools query -f '%ID\t%INFO/STIX_ONE\n' "${outdir}/hg002-stix_lr-min_read_${mr}.vcf" | sort -k 2,2nr >> "${outdir}/hg002-stix_lr-min_read_${mr}.popfreq.tsv"
 done
 
 # compress vcfs
