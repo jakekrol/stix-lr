@@ -21,9 +21,9 @@ for fstix in "${stixlr_files[@]}"; do
             --output hexbin-stixlr_mr${mr}-needlr_ov${ov}.png \
             --height 4 \
             --width 5 \
-            --color-scale "0,20" \
+            --color-scale "0,5" \
             --xlabel "NeedLR;OV=${ov} population frequency" \
-            --ylabel "STIX-LR;MR=${mr} population frequency" \
+            --ylabel "Num. of samples with STIX long-read depth >= ${mr}" \
             --merged hexbin-stixlr_mr${mr}-needlr_ov${ov}.tsv \
             --title "HG002 CMRG SVs"
     done
@@ -49,7 +49,7 @@ for fstix in "${stixlr_files[@]}"; do
             --width 5 \
             --color-scale "0,20" \
             --xlabel "SVAFotate;OV=${ov} population frequency" \
-            --ylabel "STIX-LR;MR=${mr} population frequency" \
+            --ylabel "Num. of samples with STIX long-read depth >= ${mr}" \
             --merged hexbin-stixlr_mr${mr}-svafotate_ov${ov}.tsv \
             --title "HG002 CMRG SVs"
     done
