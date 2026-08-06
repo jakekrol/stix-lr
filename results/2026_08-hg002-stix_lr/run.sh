@@ -27,3 +27,12 @@ for mr in "${min_reads[@]}"; do
     printf "${outfile}\t${t_elapsed}\n" >> "$timefile"
 done
 
+# get pop frequencies for the stix output
+for mr in "${min_reads[@]}"; do
+    bcftools query -f '%ID\t%INFO/STIX_ONE\n' "${outdir}/hg002-stix_lr-min_read_${mr}.vcf" | sort -k 2,2nr > "${outdir}/hg002-stix_lr-min_read_${mr}.popfreq.tsv"
+done
+
+# compress vcfs
+bgzip -c "${outdir}/hg002-stix_lr-min_read_1.vcf" > "${outdir}/hg002-stix_lr-min_read_1.vcf.gz"
+bgzip -c "${outdir}/hg002-stix_lr-min_read_5.vcf" > "${outdir}/hg002-stix_lr-min_read_5.vcf.gz"
+
