@@ -7,6 +7,7 @@
 - [HG002 CMRG recall](results/2026_08-hg002_cmrg-recall)
 - [HG002 CMRG hexbin](results/2026_08-hg002_cmrg-hexbin)
 - [COSMIC density](results/2026_01-cosmic-density)
+- [COSMIC hexbin](results/2026_08-cosmic-hexbin)
 
 ## COLO
 
