@@ -9,7 +9,7 @@ SCRIPT_GET_POP_FREQ=/data/jake/needLR-fork/src/annotate_collapsed_variants.py
 export SCRIPT_GET_POP_FREQ
 OUTFILE_POPFREQ="needlr_pop_freq.tsv"
 export OUTFILE_POPFREQ
-VCF_IN=../../data/2026_08-thousg_svs/1KGP.subset.vcf
+VCF_IN=../../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz
 export VCF_IN
 # needLR names outdirs based on input vcf name
 DIR_NEEDLR_OUT=$(basename $VCF_IN)
