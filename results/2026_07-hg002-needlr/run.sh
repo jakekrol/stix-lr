@@ -18,11 +18,11 @@ for overlap in "${OVERLAPS[@]}"; do
     out_time=needLR_ov${overlap}.time.txt
     dir_out="${dir_overlap_out}/${DIR_NEEDLR_OUT}"
 
-    # echo "# needLR with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
-    # t_0=$(date +%s)
-    # needLR annotate -O ${dir_overlap_out} -o ${overlap} ${VCF_IN}
-    # t_1=$(date +%s)
-    # echo "$((t_1-t_0)) seconds" > ${out_time}
+    echo "# needLR with truvari overlap ${overlap} to outdir ${dir_overlap_out}"
+    t_0=$(date +%s)
+    needLR annotate -O ${dir_overlap_out} -o ${overlap} ${VCF_IN}
+    t_1=$(date +%s)
+    echo "$((t_1-t_0)) seconds" > ${out_time}
 
     collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
     merged_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapse_out.vcf")
