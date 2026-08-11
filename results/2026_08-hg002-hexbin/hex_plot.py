@@ -25,7 +25,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Plot population frequency")
     parser.add_argument("--stix", help="STIX aggregated queries bed", required=True)
 
-    parser.add_argument("--stix_max", default=1108, type=int, help="Max value for STIX")
+    parser.add_argument("--stix_max", default=None, type=int, help="Max value for STIX")
 
 
     parser.add_argument("--other", help="Pop freq comparison bed", required=True)
@@ -120,7 +120,7 @@ def plot_data(
         sep="\t",
     )
     stix_df.columns = ["svid", "stix_count"]
-    stix_df["stix_population_frequency"] = stix_df["stix_count"] / stix_max
+    stix_df["stix_population_frequency"] = stix_df["stix_count"] / stix_max if stix_max else stix_df["stix_count"]
     # if stix_max:
     #     stix_df = stix_df[stix_df["stix_count"] <= stix_max]
 

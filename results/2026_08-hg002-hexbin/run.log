@@ -1,0 +1,72 @@
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR popfreq file needlr-ov0.9-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.12, p=9.37e-94
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR popfreq file needlr-ov0.7-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.15, p=2.31e-146
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR popfreq file needlr-ov0.5-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.21, p=7.95e-291
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR popfreq file needlr-ov0.9-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.27, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR popfreq file needlr-ov0.7-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.25, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR popfreq file needlr-ov0.5-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.27, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR af file needlr-ov0.9-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.16, p=1.50e-174
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR af file needlr-ov0.7-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.19, p=5.10e-231
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to NEEDLR af file needlr-ov0.5-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.24, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR af file needlr-ov0.9-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.30, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR af file needlr-ov0.7-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.28, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to NEEDLR af file needlr-ov0.5-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.29, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.5_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.22, p=1.06e-310
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.7_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.24, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.9_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.27, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.5_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.35, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.7_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.37, p=0.00e+00
+# comparing STIX-LR file ../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv to SVAFotate file ../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.9_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.40, p=0.00e+00

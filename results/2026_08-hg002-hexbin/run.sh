@@ -33,11 +33,12 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_popfreq_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --xlabel "NeedLR;OV=${ov} population frequency" \
             --ylabel "Num. of samples with STIX long-read depth >= ${mr}" \
-            --merged hexbin-stixlr_mr${mr}-needlr_ov${ov}.tsv \
+            --merged hexbin-stixlr_mr${mr}-needlr_popfreq_ov${ov}.tsv \
             --title "HG002 SVs"
     done
 done
@@ -55,11 +56,12 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_af_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --xlabel "NeedLR;OV=${ov} AF" \
             --ylabel "Num. of samples with STIX long-read depth >= ${mr}" \
-            --merged hexbin-stixlr_mr${mr}-needlr_ov${ov}.tsv \
+            --merged hexbin-stixlr_mr${mr}-needlr_af_ov${ov}.tsv \
             --title "HG002 SVs"
     done
 done
@@ -81,6 +83,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fsvafotate \
             --output hexbin-stixlr_mr${mr}-svafotate_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --xlabel "SVAFotate;OV=${ov} population frequency" \
