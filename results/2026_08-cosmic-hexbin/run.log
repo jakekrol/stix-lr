@@ -1,0 +1,72 @@
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR popfreq file needlr-ov0.9-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.38, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR popfreq file needlr-ov0.7-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.44, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR popfreq file needlr-ov0.5-popfreq.tsv
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.45, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR popfreq file needlr-ov0.9-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.50, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR popfreq file needlr-ov0.7-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.58, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR popfreq file needlr-ov0.5-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.59, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR af file needlr-ov0.9-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.38, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR af file needlr-ov0.7-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.45, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to NEEDLR af file needlr-ov0.5-af.tsv
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.46, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR af file needlr-ov0.9-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.50, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR af file needlr-ov0.7-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.59, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to NEEDLR af file needlr-ov0.5-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.61, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.5_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.5
+r = 0.23, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.7_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.7
+r = 0.26, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.9_maxpopfreq.txt
+# parsed min read: 1
+# parsed overlap: 0.9
+r = 0.19, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.5_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.39, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.7_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.40, p=0.00e+00
+# comparing STIX-LR file ../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv to SVAFotate file ../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.9_maxpopfreq.txt
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.30, p=0.00e+00
