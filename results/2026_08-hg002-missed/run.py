@@ -9,12 +9,12 @@ import numpy as np
 import sys
 
 parser = argparse.ArgumentParser(description="")
-parser.add_argument("--needlr", default='../2026_07-hg002_cmrg-needlr/needLR_ov0.5/needlr_pop_freq.tsv', help="Path to the needlr table")
+parser.add_argument("--needlr", default='../2026_07-hg002-needlr/needLR_ov0.5/needlr_pop_freq.tsv', help="Path to the needlr table")
 parser.add_argument("--svafotate", default="../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.9_maxpopfreq.txt", help="Path to the svafotate table")
-parser.add_argument("--stixlrmr5", default="../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.popfreq.tsv", help="Path to the stixlr table")
-parser.add_argument("--stixlrmr1", default="../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_1.popfreq.tsv", help="Path to the stixlr table")
-parser.add_argument("--query_vcf", default='../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.vcf', help="Path to the query VCF file")
-parser.add_argument("--out_prefix", default='hg002_cmrg', help="Prefix for the output files")
+parser.add_argument("--stixlrmr5", default="../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv", help="Path to the stixlr table")
+parser.add_argument("--stixlrmr1", default="../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv", help="Path to the stixlr table")
+parser.add_argument("--query_vcf", default='../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.END.gt50bp.vcf.gz', help="Path to the query VCF file")
+parser.add_argument("--out_prefix", default='hg002', help="Prefix for the output files")
 parser.add_argument("--figsize", default=(6, 5), type=lambda s: tuple(map(int, s.split(','))), help="Figure size for the plots (width,height)")
 parser.add_argument("--cached_data", default=None)
 args = parser.parse_args()
@@ -25,8 +25,8 @@ BIN_LABELS = [
     '600-700bp', '700-800bp', '800-900bp', '900-1kbp', '1k-5kbp', '5k-10kbp',
     '10k-15kbp', '15k-20kbp', '>20kbp'
 ]
-STIX_SVID_COL='svid'
-STIX_SAMPLE_COL='sample_count'
+STIX_SVID_COL='SVID'
+STIX_SAMPLE_COL='STIX_SAMPLES'
 NEEDLR_SVID_COL='svid'
 NEEDLR_AF_COL='allele_frequency'
 SVAFOTATE_SVID_COL='svid'
@@ -77,13 +77,15 @@ def main():
     df_needlr = pd.read_csv(args.needlr, sep='\t')
     df_svafotate = pd.read_csv(args.svafotate, sep='\t')
     vcf = VCF(args.query_vcf)
-    # n = vcf.num_records
+    n = vcf.num_records
 
     if not args.cached_data:
         df_out = pd.DataFrame(columns=['svid', 'svtype', 'svlen', 'stixlr_mr1_samples', 'stixlr_mr5_samples', 'needlr_af', 'svafotate_af'])
-        # n = vcf.num_records
+        n = vcf.num_records
 
         for i,v in enumerate(vcf):
+            if i % 100 == 0:
+                print(f"Processing variant {i}/{n}")
             svid = v.ID
             svtype = v.INFO.get('SVTYPE')
             svlen = v.INFO.get('SVLEN')

@@ -1,4 +1,5 @@
-Method	Recall
-STIX-LR	1.0000
+Method	recall
+STIX-LR MR=1	1.0000
+STIX-LR MR=5	1.0000
 needLR	0.9220
-SVAFotate	0.4587
+SVAFotate	0.1330
