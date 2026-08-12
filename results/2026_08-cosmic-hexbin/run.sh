@@ -32,6 +32,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_popfreq_ov${ov}.png \
+            --color "Greens" \
             --height 4 \
             --width 5 \
             --xlabel "NeedLR;OV=${ov} population frequency" \
@@ -54,6 +55,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_af_ov${ov}.png \
+            --color "Greens" \
             --height 4 \
             --width 5 \
             --xlabel "NeedLR;OV=${ov} AF" \
@@ -79,6 +81,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fsvafotate \
             --output hexbin-stixlr_mr${mr}-svafotate_ov${ov}.png \
+            --color "Greens" \
             --height 4 \
             --width 5 \
             --xlabel "SVAFotate;OV=${ov} population frequency" \
