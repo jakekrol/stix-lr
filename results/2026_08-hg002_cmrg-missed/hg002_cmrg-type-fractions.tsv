@@ -1,0 +1,3 @@
+Method	Missed_INS	Missed_DEL	Recovered_INS	Recovered_DEL
+needLR	0.7647	0.2353	0.5522	0.4478
+SVAFotate	0.4576	0.5424	0.7000	0.3000
