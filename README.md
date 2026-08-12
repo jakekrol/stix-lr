@@ -14,7 +14,7 @@
 ## COSMIC
 
 Hexbin STIX-LR (min. reads = 5) v needLR (overlap=0.5)
-![](results/2026_08-cosmic-hexbin/hexbin-stixlr_mr5-needlr_ov0.5.png)
+![](results/2026_08-cosmic-hexbin/hexbin-stixlr_mr5-needlr_af_ov0.5.png)
 
 Hexbin STIX-LR (min. reads = 5) v SVAFotate (overlap = 0.9)
 ![](results/2026_08-cosmic-hexbin/hexbin-stixlr_mr5-svafotate_ov0.9.png)
@@ -36,7 +36,7 @@ Fraction of missed germline variants
 ## HG002
 
 Hexbin STIX-LR (min. reads = 5) v needLR (overlap=0.5)
-![](results/2026_08-hg002-hexbin/hexbin-stixlr_mr5-needlr_ov0.5.png)
+![](results/2026_08-hg002-hexbin/hexbin-stixlr_mr5-needlr_af_ov0.5.png)
 
 Hexbin STIX-LR (min. reads = 5) v SVAFotate (overlap=0.9)
 ![](results/2026_08-hg002-hexbin/hexbin-stixlr_mr5-svafotate_ov0.9.png)
