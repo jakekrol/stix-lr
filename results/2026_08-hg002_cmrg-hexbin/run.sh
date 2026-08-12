@@ -31,6 +31,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_popfreq_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --color-scale "0,5" \
@@ -54,6 +55,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fneedlr \
             --output hexbin-stixlr_mr${mr}-needlr_af_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --color-scale "0,5" \
@@ -80,6 +82,7 @@ for fstix in "${stixlr_files[@]}"; do
             --stix $fstix \
             --other $fsvafotate \
             --output hexbin-stixlr_mr${mr}-svafotate_ov${ov}.png \
+            --color Blues \
             --height 4 \
             --width 5 \
             --color-scale "0,20" \
