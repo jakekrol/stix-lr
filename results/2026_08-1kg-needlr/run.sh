@@ -53,3 +53,19 @@ done
 # source bashrc for conda init
 cat $GARGS_INPUT | \
     gargs -p 9 --log=gargs.log "source ~/.bashrc; conda activate needLR-4.0-cyvcf2; source /data/jake/jkbiolib/.venv/bin/activate; run_needlr {0} {1} {2} {3}"
+
+
+# GARGS_INPUT='input2.tsv'
+# for overlap in "${OVERLAPS[@]}"; do
+#     dir_overlap_out="needLR_ov${overlap}"
+#     dir_out="${dir_overlap_out}/${DIR_NEEDLR_OUT}"
+#     collapsed_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapsed_variants.vcf")
+#     merged_vcf=$(find ${dir_out} -type f -iname "*_truvari_collapse_out.vcf")
+#     printf "%s\t%s\t%s\t%s\n" ${VCF_IN} ${collapsed_vcf} ${merged_vcf} ${dir_overlap_out}/${OUTFILE_POPFREQ} >> ${GARGS_INPUT}
+# done
+
+# cat $GARGS_INPUT | \
+#     gargs \
+#         -p 9 \
+#         --log=gargs.log \
+#         "source /data/jake/jkbiolib/.venv/bin/activate; ${SCRIPT_GET_POP_FREQ} --input_vcf {0} --collapsed_vcf {1} --merged_vcf {2} --out {3}"
