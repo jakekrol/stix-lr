@@ -219,7 +219,6 @@ def main():
         f.write(f"STIX-LR MR=5\t{stixlr_mr5_frac_del_missed}\t{stixlr_mr5_frac_ins_missed}\n")
         f.write(f"needLR\t{needlr_frac_del_missed}\t{needlr_frac_ins_missed}\n")
         f.write(f"SVAFotate\t{svafotate_frac_del_missed}\t{svafotate_frac_ins_missed}\n")
-    breakpoint()
 
 
     
