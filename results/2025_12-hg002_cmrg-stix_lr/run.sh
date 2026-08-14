@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-vcf=$(realpath "../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.vcf")
+vcf=$(realpath "../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf")
 if [ ! -f "$vcf" ]; then
     echo "# error: VCF file $vcf not found."
     exit 1
@@ -43,3 +43,9 @@ t_e=$(date +%s)
 t_elapsed=$((t_e - t_s))
 printf "${outfile}\t${t_elapsed}\n" >> $timefile
 echo "# completed in $t_elapsed seconds"
+
+min_reads=(1 5)
+for mr in "${min_reads[@]}"; do
+    printf "svid\tstix_samples\n" > "${outdir}/hg002_cmrg.stix_lr.min_read_${mr}.popfreq.tsv"
+    bcftools query -f "%ID\t%INFO/STIX_ONE\n" "${outdir}/hg002_cmrg.stix_lr.min_read_${mr}.vcf" >> "${outdir}/hg002_cmrg.stix_lr.min_read_${mr}.popfreq.tsv"
+done

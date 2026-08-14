@@ -6,7 +6,7 @@
 OVERLAPS=(0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9)
 SCRIPT_GET_POP_FREQ=/data/jake/needLR-fork/src/annotate_collapsed_variants.py
 OUTFILE_POPFREQ="needlr_pop_freq.tsv"
-VCF_IN=../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.END.vcf.gz
+VCF_IN=../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
 cp $VCF_IN $(pwd) # not necessary
 # needLR names outdirs based on input vcf name
 DIR_NEEDLR_OUT=$(basename $VCF_IN)

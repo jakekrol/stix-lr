@@ -1,0 +1,378 @@
+# needLR with truvari overlap 0.1 to outdir needLR_ov0.1
+# truvari overlap: 0.1
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.1
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.1/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.2 to outdir needLR_ov0.2
+# truvari overlap: 0.2
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.2
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.2/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.3 to outdir needLR_ov0.3
+# truvari overlap: 0.3
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.3
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.3/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.4 to outdir needLR_ov0.4
+# truvari overlap: 0.4
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.4
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.4/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.5 to outdir needLR_ov0.5
+# truvari overlap: 0.5
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.5
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.5/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.6 to outdir needLR_ov0.6
+# truvari overlap: 0.6
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.6
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.6/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.7 to outdir needLR_ov0.7
+# truvari overlap: 0.7
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.7
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.7/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.8 to outdir needLR_ov0.8
+# truvari overlap: 0.8
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.8
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.8/needlr_pop_freq.tsv
+# needLR with truvari overlap 0.9 to outdir needLR_ov0.9
+# truvari overlap: 0.9
+
+found 1 positional arguments, ignoring input from -Q and -L
+
+needLR v4.0
+
+Command         :   needLR annotate
+        input VCFs      :   ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+        input BEDs      :   
+        control vcf     :   /data/jake/needLR-fork/backend_files/UWONT_500_sniffles_2.6.2_preproc2_T31_v4.2.2.vcf.gz
+            # samples.  :   500
+        output location :   needLR_ov0.9
+        analysis region :   All
+
+
+Beginning NeedLR annotation of ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Annotating as a single sample
+
+Starting Step 1 (prep and merge)
+
+Preprocessing query VCF to SVs >=50bp, on full chromosomes, FILTER=0
+There are 218 starting variants in ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Removed 0 lines from ../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz
+Creating list of input VCFs for bcftools merge
+Merging
+Added -311688 lines
+Running truvari collapse
+exiting early (jdk)
+# reading vcfs
+# mapping merge svid to collapse id
+# counting control samples with alt alleles of merge vcf
+# computing allele fraction of merge vcf
+# number of needlr control samples: 500
+# number of query samples: 1
+# mapping merge svid to pop_freq
+# mapping merge svid to allele fraction
+# mapping CollapseId to pop_freq
+# mapping CollapseId to allele_fraction
+# mapping collapsed svids -> population frequency and allele fraction
+# getting population frequency for query SVIDs
+# writing output to needLR_ov0.9/needlr_pop_freq.tsv
