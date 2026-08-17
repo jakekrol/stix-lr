@@ -98,10 +98,24 @@ def plot_frequency_bins(datasets):
             ax.bar_label(container, fmt='%d', padding=2)
 
         plt.tight_layout()
-        plt.savefig(f"{name.replace(' ', '_')}.png")
+        plt.savefig(f"{name.lower().replace(' ', '_')}-freq_bin.png")
 
 def normalize_stix(x, denom=args.stix_samples):
     return x / args.stix_samples
+
+def merged2recall(df_merge):
+    cols = df_merge.columns
+    recalls={}
+    m = df_merge.shape[0]
+    for col in cols:
+        if col != COL_NAME_SVID:
+            mask = df_merge[col] > 0
+            recall = mask.sum() / m
+            recalls[col]=recall
+    recalls = pd.DataFrame(list(recalls.items()), columns = ['tool', 'recall'])
+    return recalls
+        
+    
 
 
 def main():
@@ -136,6 +150,8 @@ def main():
     )
     merged.to_csv('hg002-merge.tsv', sep='\t')
     merged_datasets['HG002'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('hg002-recall.tsv',sep='\t')
     ### hg002 cmrg
     print("# merging hg002cmrg")
     df_hg002cmrg_stixlrmr1 = pd.read_csv(args.stixlr_hg002_cmrg_mr1, sep='\t')
@@ -173,6 +189,8 @@ def main():
     )
     merged.to_csv('hg002cmrg-merge.tsv', sep='\t')
     merged_datasets['HG002CMRG'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('hg002_cmrg-recall.tsv',sep='\t')
     ### cosmic
     df_cosmic_stixlrmr1 = pd.read_csv(args.stixlr_cosmic_mr1, sep='\t')
     df_cosmic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -209,6 +227,8 @@ def main():
     )
     merged.to_csv('cosmic-merge.tsv', sep='\t')
     merged_datasets['COSMIC'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('cosmic-recall.tsv',sep='\t')
     ### 1000G
     df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
     df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -245,6 +265,8 @@ def main():
     )
     merged.to_csv('thousg-merge.tsv', sep='\t')
     merged_datasets['1kg'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('thousg-recall.tsv',sep='\t')
     ### colo germline
     df_colo_germline_stixlrmr1 = pd.read_csv(args.stixlr_colo_germline_mr1, sep='\t')
     df_colo_germline_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -281,6 +303,8 @@ def main():
     )
     merged.to_csv('colo_germline-merge.tsv', sep='\t')
     merged_datasets['COLO germline'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('colo_germline-recall.tsv',sep='\t')
     ### colo somatic
     df_colo_somatic_stixlrmr1 = pd.read_csv(args.stixlr_colo_somatic_mr1, sep='\t')
     df_colo_somatic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -317,6 +341,8 @@ def main():
     )
     merged.to_csv('colo_somatic-merge.tsv', sep='\t')
     merged_datasets['COLO somatic'] = merged
+    df_recall = merged2recall(merged)
+    df_recall.to_csv('colo_somatic-recall.tsv',sep='\t')
     plot_frequency_bins(merged_datasets)
 
 
