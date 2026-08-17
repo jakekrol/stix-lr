@@ -6,13 +6,13 @@ import time
 from functions import get_conda_exe_path
 from functions import extract_maxaf
 
-parser = argparse.ArgumentParser(description="Run svafotate on HG002 CMRG VCF")
-parser.add_argument("--input", required=True, help="Input VCF file")
-parser.add_argument("--outdir", required=True, help="Output directory")
+parser = argparse.ArgumentParser(description="Run svafotate on 1kg VCF")
+parser.add_argument("--input", default='../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz', help="Input VCF file")
+parser.add_argument("--outdir", default='../results/2026_08-1kg-svafotate', help="Output directory")
 parser.add_argument("--env_name", default="svafotate-env", help="Conda environment name for SVAFotate")
-parser.add_argument("--bed", required=True, help="SVAFotate BED file")
-parser.add_argument("--timefile", default=None, help="Optional time log file")
-parser.add_argument('--outpattern', default=None, help='Optional output VCF file path')
+parser.add_argument("--bed", default='../data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz', help="SVAFotate BED file")
+parser.add_argument("--timefile", default="../results/2026_08-1kg-svafotate/time.log", help="Optional time log file")
+parser.add_argument('--outpattern', default='svafotate-1kg', help='Out file pattern')
 # /data/jake/stix-lr/data/2025_11-svafotate_bed/SVAFotate_core_SV_popAFs.GRCh38.v4.1.bed.gz
 args = parser.parse_args()
 overlaps = ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9"]
@@ -47,6 +47,7 @@ def main():
   t_0 = time.time()
   validate_args(args)
   for overlap in overlaps:
+    # out_vcf = f"{args.outpattern}_overlap_{overlap}.vcf" if args.outpattern else os.path.join(args.outdir, f"svafotate-hg002-cmrg-overlap_{overlap}.vcf")
     out_vcf = os.path.join(args.outdir, f"{args.outpattern}_overlap_{overlap}.vcf")
     print(f"# running SVAFotate for overlap {overlap}")
     svafotate_vcf = run_svafotate(
