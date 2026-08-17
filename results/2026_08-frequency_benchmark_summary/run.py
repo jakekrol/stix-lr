@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
-import pandas as pd
-import os
 from functools import reduce
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import pandas as pd
 
 parser = argparse.ArgumentParser(description='SV frequency benchmark summary')
 # parser.add_argument('--stixlr_hg002_mr1', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.vcf')
@@ -68,7 +70,42 @@ COL_NAME_STIXLR_SAMPLES='stix_samples'
 COL_NAME_SVAFOTATE_AF='svafotate_af'
 COL_NAME_NEEDLR_AF='needlr_af'
 
+def bin_frequencies(frequencies):
+    counts = pd.Series({
+    "[0,0]": (frequencies == 0).sum(),
+    "(0,0.001]": ((frequencies > 0) & (frequencies <= 0.001)).sum(),
+    "(0.001,0.75]": ((frequencies > 0.001) & (frequencies <= 0.75)).sum(),
+    "(0.5,1]": ((frequencies > 0.5) & (frequencies <= 1)).sum(),
+    })
+    return counts
+
+def plot_frequency_bins(datasets):
+    for name, df in datasets.items():
+        frequency_cols = [c for c in df.columns if c != COL_NAME_SVID]
+
+        counts = pd.DataFrame({
+            col: bin_frequencies(df[col])
+            for col in frequency_cols
+        })
+
+        ax = counts.plot.bar()
+        ax.set_title(name)
+        ax.set_xlabel("Population/Allele frequency")
+        ax.set_ylabel("SV count")
+        ax.legend(title="Dataset")
+
+        for container in ax.containers:
+            ax.bar_label(container, fmt='%d', padding=2)
+
+        plt.tight_layout()
+        plt.savefig(f"{name.replace(' ', '_')}.png")
+
+def normalize_stix(x, denom=args.stix_samples):
+    return x / args.stix_samples
+
+
 def main():
+    merged_datasets={}
     ### hg002
     # df_stixlrmr1_hg002 = 
     # df_stixlrmr5_hg002 = 
@@ -98,12 +135,15 @@ def main():
         dfs2merge
     )
     merged.to_csv('hg002-merge.tsv', sep='\t')
+    merged_datasets['HG002'] = merged
     ### hg002 cmrg
     print("# merging hg002cmrg")
     df_hg002cmrg_stixlrmr1 = pd.read_csv(args.stixlr_hg002_cmrg_mr1, sep='\t')
     df_hg002cmrg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_hg002cmrg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_hg002cmrg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_hg002cmrg_stixlrmr5 = pd.read_csv(args.stixlr_hg002_cmrg_mr5, sep='\t')
     df_hg002cmrg_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_hg002cmrg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_hg002cmrg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     df_hg002cmrg_svafotate05 = pd.read_csv(args.svafotate_hg002_cmrg_ov05, sep='\t')
     df_hg002cmrg_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     df_hg002cmrg_svafotate07 = pd.read_csv(args.svafotate_hg002_cmrg_ov07, sep='\t')
@@ -132,11 +172,14 @@ def main():
         dfs2merge
     )
     merged.to_csv('hg002cmrg-merge.tsv', sep='\t')
+    merged_datasets['HG002CMRG'] = merged
     ### cosmic
     df_cosmic_stixlrmr1 = pd.read_csv(args.stixlr_cosmic_mr1, sep='\t')
     df_cosmic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_cosmic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_cosmic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_cosmic_stixlrmr5 = pd.read_csv(args.stixlr_cosmic_mr5, sep='\t')
     df_cosmic_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_cosmic_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_cosmic_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     df_cosmic_svafotate05 = pd.read_csv(args.svafotate_cosmic_ov05, sep='\t')
     df_cosmic_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     df_cosmic_svafotate07 = pd.read_csv(args.svafotate_cosmic_ov07, sep='\t')
@@ -165,11 +208,14 @@ def main():
         dfs2merge
     )
     merged.to_csv('cosmic-merge.tsv', sep='\t')
+    merged_datasets['COSMIC'] = merged
     ### 1000G
     df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
     df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_thousg_stixlrmr5 = pd.read_csv(args.stixlr_thousg_mr5, sep='\t')
     df_thousg_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_thousg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_thousg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     # df_thousg_svafotate05 = pd.read_csv(args.svafotate_thousg_ov05, sep='\t')
     # df_thousg_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     # df_thousg_svafotate07 = pd.read_csv(args.svafotate_thousg_ov07, sep='\t')
@@ -198,11 +244,14 @@ def main():
         dfs2merge
     )
     merged.to_csv('thousg-merge.tsv', sep='\t')
+    merged_datasets['1kg'] = merged
     ### colo germline
     df_colo_germline_stixlrmr1 = pd.read_csv(args.stixlr_colo_germline_mr1, sep='\t')
     df_colo_germline_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_colo_germline_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_colo_germline_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_colo_germline_stixlrmr5 = pd.read_csv(args.stixlr_colo_germline_mr5, sep='\t')
     df_colo_germline_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_colo_germline_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_colo_germline_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     df_colo_germline_svafotate05 = pd.read_csv(args.svafotate_colo_germline_ov05, sep='\t')
     df_colo_germline_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     df_colo_germline_svafotate07 = pd.read_csv(args.svafotate_colo_germline_ov07, sep='\t')
@@ -231,11 +280,14 @@ def main():
         dfs2merge
     )
     merged.to_csv('colo_germline-merge.tsv', sep='\t')
+    merged_datasets['COLO germline'] = merged
     ### colo somatic
     df_colo_somatic_stixlrmr1 = pd.read_csv(args.stixlr_colo_somatic_mr1, sep='\t')
     df_colo_somatic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_colo_somatic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_colo_somatic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_colo_somatic_stixlrmr5 = pd.read_csv(args.stixlr_colo_somatic_mr5, sep='\t')
     df_colo_somatic_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_colo_somatic_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_colo_somatic_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     df_colo_somatic_svafotate05 = pd.read_csv(args.svafotate_colo_somatic_ov05, sep='\t')
     df_colo_somatic_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     df_colo_somatic_svafotate07 = pd.read_csv(args.svafotate_colo_somatic_ov07, sep='\t')
@@ -264,6 +316,8 @@ def main():
         dfs2merge
     )
     merged.to_csv('colo_somatic-merge.tsv', sep='\t')
+    merged_datasets['COLO somatic'] = merged
+    plot_frequency_bins(merged_datasets)
 
 
 
