@@ -38,7 +38,7 @@ done
 # get pop frequencies for the stix output
 X=(germline somatic)
 for mr in "${min_reads[@]}"; do
-    for x in "${X}"; do
+    for x in "${X[@]}"; do
         printf "SVID\tSTIX_SAMPLES\n" > "${outdir}/colo_${x}-stix_lr-min_read_${mr}.popfreq.tsv"
         bcftools query -f '%ID\t%INFO/STIX_ONE\n' "${outdir}/colo_${x}-stix_lr-min_read_${mr}.vcf" | sort -k 2,2nr >> "${outdir}/colo_${x}-stix_lr-min_read_${mr}.popfreq.tsv"
     done
