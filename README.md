@@ -1,5 +1,7 @@
 # STIX-LR analyses
 
+- [Benchmark summary](results/2026_08-frequency_benchmark_summary)
+- [1kg hexbin](results/2026_08-1kg-hexbin)
 - [COSMIC density](results/2026_01-cosmic-density)
 - [COSMIC hexbin](results/2026_08-cosmic-hexbin)
 - [COLO ROC](results/2026_08-colo-roc)
@@ -9,6 +11,11 @@
 - [HG002 CMRG density](results/2026_01-hg002_cmrg-density)
 - [HG002 CMRG hexbin](results/2026_08-hg002_cmrg-hexbin)
 - [HG002 CMRG type and length](results/2026_08-hg002_cmrg-missed)
+
+## 1kg
+
+Hexbin STIX-LR (min. reads = 5) v needLR (overlap=0.5)
+![](results/2026_08-1kg-hexbin/hexbin-stixlr_mr5-needlr_af_ov0.5.png)
 
 ## COSMIC
 
@@ -49,7 +56,13 @@ Hexbin
 Density
 ![](results/2026_01-hg002_cmrg-density/hg002-cmrg-popfreq-density.png)
 
-Recall (fraction of SVs with pop. freq. > 0)
-![](results/2026_08-hg002_cmrg-recall/hg002_cmrg-recall-bar.png)
+## Population/allele frequency bins
+![](results/2026_08-frequency_benchmark_summary/cosmic-freq_bin.png)
+![](results/2026_08-frequency_benchmark_summary/1kg-freq_bin.png)
+![](results/2026_08-frequency_benchmark_summary/colo_germline-freq_bin.png)
+![](results/2026_08-frequency_benchmark_summary/hg002-freq_bin.png)
+![](results/2026_08-frequency_benchmark_summary/hg002cmrg-freq_bin.png)
+![](results/2026_08-frequency_benchmark_summary/colo_somatic-freq_bin.png)
+
 
 
