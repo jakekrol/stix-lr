@@ -6,8 +6,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
+from cyvcf2 import VCF
 
 parser = argparse.ArgumentParser(description='SV frequency benchmark summary')
+# vcfs
+parser.add_argument('--vcf_hg002', default='../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.addEND.gt50bp.vcf.gz')
+parser.add_argument('--vcf_hg002_cmrg', default='../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz')
+parser.add_argument('--vcf_cosmic', default='../2026_01-cosmic-tsv-to-vcf/cosmic.v103.grch38.vcf.gz')
+parser.add_argument('--vcf_thousg', default='../../data/2026_08-thousg_svs/1KGP.subset.vcf.gz')
+parser.add_argument('--vcf_colo_germline', default='../2025_12-colo-filtered/colo829_germline.vcf')
+parser.add_argument('--vcf_colo_somatic', default='../2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf')
 # stixlr
 parser.add_argument('--stix_samples', default=1108)
 # parser.add_argument('--stixlr_hg002_mr1', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv')
@@ -124,6 +132,7 @@ def normalize_stix(x, denom=args.stix_samples):
     return x / args.stix_samples
 
 def merged2recall(df_merge):
+    # make a dataframe of svids for key
     cols = df_merge.columns
     recalls={}
     m = df_merge.shape[0]
@@ -134,13 +143,29 @@ def merged2recall(df_merge):
             recalls[col]=recall
     recalls = pd.DataFrame(list(recalls.items()), columns = ['tool', 'recall'])
     return recalls
-        
-    
+
+def merge_dfs(dfs, svids,fillna=0):
+    df_svid = pd.DataFrame({COL_NAME_SVID: list(svids)})
+    dfs = [df_svid] + dfs
+    merged = reduce(
+        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="outer"),
+        dfs
+    )
+    merged.fillna(fillna, inplace=True)
+    return merged
+
+def vcf2ids(path_vcf):
+    vcf = VCF(path_vcf)
+    ids = set()
+    for v in vcf:
+        ids.add(v.ID)
+    return ids
 
 
 def main():
     merged_datasets={}
     ### hg002
+    ids_hg002 = vcf2ids(args.vcf_hg002)
     # df_hg002_stixlrmr1 = pd.read_csv(args.stixlr_hg002_mr1, sep='\t')
     # df_hg002_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     # df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -168,17 +193,15 @@ def main():
             df_hg002_needlr09
     ]
     print("# merging hg002")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
-    merged.to_csv('hg002-merge.tsv', sep='\t', index=False)
+    df_merged = merge_dfs(dfs2merge, ids_hg002)
+    df_merged.to_csv('hg002-merge.tsv', sep='\t', index=False)
     name = "HG002 SVs"
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    merged_datasets[name] = df_merged
+    df_recall = merged2recall(df_merged)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('hg002-recall.tsv',sep='\t', index=False)
     ### hg002 cmrg
+    ids_hg002cmrg = vcf2ids(args.vcf_hg002_cmrg)
     df_hg002cmrg_stixlrmr1 = pd.read_csv(args.stixlr_hg002_cmrg_mr1, sep='\t')
     df_hg002cmrg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     df_hg002cmrg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_hg002cmrg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -208,17 +231,15 @@ def main():
             df_hg002cmrg_needlr09
     ]
     print("# merging hg002cmrg")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
-    merged.to_csv('hg002cmrg-merge.tsv', sep='\t', index=False)
+    df_merge = merge_dfs(dfs2merge, ids_hg002cmrg)
+    df_merge.to_csv('hg002cmrg-merge.tsv', sep='\t', index=False)
     name = "HG002 CMRG SVs"
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    merged_datasets[name] = df_merge
+    df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('hg002_cmrg-recall.tsv',sep='\t', index=False)
     ### cosmic
+    ids_cosmic = vcf2ids(args.vcf_cosmic)
     df_cosmic_stixlrmr1 = pd.read_csv(args.stixlr_cosmic_mr1, sep='\t')
     df_cosmic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     df_cosmic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_cosmic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -248,17 +269,15 @@ def main():
             df_cosmic_needlr09
     ]
     print("# merging cosmic")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
-    merged.to_csv('cosmic-merge.tsv', sep='\t', index=False)
+    df_merge = merge_dfs(dfs2merge, ids_cosmic)
+    df_merge.to_csv('cosmic-merge.tsv', sep='\t', index=False)
     name = "COSMIC"
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    merged_datasets[name] = df_merge
+    df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('cosmic-recall.tsv',sep='\t', index=False)
     ### 1000G
+    ids_thousg = vcf2ids(args.vcf_thousg)
     df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
     df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -288,17 +307,15 @@ def main():
             df_thousg_needlr09
     ]
     print("# merging 1000G")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
-    merged.to_csv('thousg-merge.tsv', sep='\t', index=False)
+    df_merge = merge_dfs(dfs2merge, vcf2ids(args.vcf_thousg))
+    df_merge.to_csv('thousg-merge.tsv', sep='\t', index=False)
     name = "1kg SVs"
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    merged_datasets[name] = df_merge
+    df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('thousg-recall.tsv',sep='\t', index=False)
     ### colo germline
+    ids_colo_germline = vcf2ids(args.vcf_colo_germline)
     df_colo_germline_stixlrmr1 = pd.read_csv(args.stixlr_colo_germline_mr1, sep='\t')
     df_colo_germline_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     df_colo_germline_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_colo_germline_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -328,17 +345,15 @@ def main():
             df_colo_germline_needlr09
     ]
     print("# merging colo germline")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
+    df_merge = merge_dfs(dfs2merge, ids_colo_germline)
     name="COLO germline SVs"
-    merged.to_csv('colo_germline-merge.tsv', sep='\t', index=False)
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    df_merge.to_csv('colo_germline-merge.tsv', sep='\t', index=False)
+    merged_datasets[name] = df_merge
+    df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('colo_germline-recall.tsv',sep='\t', index=False)
     ### colo somatic
+    ids_colo_somatic = vcf2ids(args.vcf_colo_somatic)
     df_colo_somatic_stixlrmr1 = pd.read_csv(args.stixlr_colo_somatic_mr1, sep='\t')
     df_colo_somatic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
     df_colo_somatic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_colo_somatic_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
@@ -368,14 +383,11 @@ def main():
             df_colo_somatic_needlr09
     ]
     print("# merging colo somatic")
-    merged = reduce(
-        lambda left, right: left.merge(right, on=COL_NAME_SVID, how="inner"),
-        dfs2merge
-    )
+    df_merge = merge_dfs(dfs2merge, ids_colo_somatic)
     name = "COLO somatic SVs"
-    merged.to_csv('colo_somatic-merge.tsv', sep='\t', index=False)
-    merged_datasets[name] = merged
-    df_recall = merged2recall(merged)
+    df_merge.to_csv('colo_somatic-merge.tsv', sep='\t', index=False)
+    merged_datasets[name] = df_merge
+    df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('colo_somatic-recall.tsv',sep='\t', index=False)
     plot_frequency_bins(merged_datasets)
