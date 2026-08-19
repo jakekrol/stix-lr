@@ -177,6 +177,49 @@ def main():
         f.write(f"STIX-LR MR=5\t{stixlr_mr5_recall:.4f}\n")
         f.write(f"needLR\t{needlr_recall:.4f}\n")
         f.write(f"SVAFotate\t{svafotate_recall:.4f}\n")
+    ### type miss fraction
+    needlr_frac_del_missed = 0
+    needlr_frac_ins_missed = 0
+    stixlr_mr1_frac_del_missed = 0
+    stixlr_mr1_frac_ins_missed = 0
+    stixlr_mr5_frac_del_missed = 0
+    stixlr_mr5_frac_ins_missed = 0
+    svafotate_frac_del_missed = 0
+    svafotate_frac_ins_missed = 0
+    # needlr
+    if 'DEL' in needlr_type_counts_missed.keys():
+        needlr_total_del = needlr_type_counts_missed['DEL'] + needlr_type_counts_recovered['DEL']
+        needlr_frac_del_missed = needlr_type_counts_missed['DEL'] / needlr_total_del
+    if 'INS' in needlr_type_counts_missed.keys():
+        needlr_total_ins = needlr_type_counts_missed['INS'] + needlr_type_counts_recovered['INS']
+        needlr_frac_ins_missed = needlr_type_counts_missed['INS'] / needlr_total_ins
+    # stixlr mr1
+    if 'DEL' in stixlr_mr1_type_counts_missed.keys():
+        stixlr_mr1_total_del = stixlr_mr1_type_counts_missed['DEL'] + stixlr_mr1_type_counts_recovered['DEL']
+        stixlr_mr1_frac_del_missed = stixlr_mr1_type_counts_missed['DEL'] / stixlr_mr1_total_del
+    if 'INS' in stixlr_mr1_type_counts_missed.keys():
+        stixlr_mr1_total_ins = stixlr_mr1_type_counts_missed['INS'] + stixlr_mr1_type_counts_recovered['INS']
+        stixlr_mr1_frac_ins_missed = stixlr_mr1_type_counts_missed['INS'] / stixlr_mr1_total_ins
+    # stixlr mr5
+    if 'DEL' in stixlr_mr5_type_counts_missed.keys():
+        stixlr_mr5_total_del = stixlr_mr5_type_counts_missed['DEL'] + stixlr_mr5_type_counts_recovered['DEL']
+        stixlr_mr5_frac_del_missed = stixlr_mr5_type_counts_missed['DEL'] / stixlr_mr5_total_del
+    if 'INS' in stixlr_mr5_type_counts_missed.keys():
+        stixlr_mr5_total_ins = stixlr_mr5_type_counts_missed['INS'] + stixlr_mr5_type_counts_recovered['INS']
+        stixlr_mr5_frac_ins_missed = stixlr_mr5_type_counts_missed['INS'] / stixlr_mr5_total_ins
+    # svafotate
+    if 'DEL' in svafotate_type_counts_missed.keys():
+        svafotate_total_del = svafotate_type_counts_missed['DEL'] + svafotate_type_counts_recovered['DEL']
+        svafotate_frac_del_missed = svafotate_type_counts_missed['DEL'] / svafotate_total_del
+    if 'INS' in svafotate_type_counts_missed.keys():
+        svafotate_total_ins = svafotate_type_counts_missed['INS'] + svafotate_type_counts_recovered['INS']
+        svafotate_frac_ins_missed = svafotate_type_counts_missed['INS'] / svafotate_total_ins
+    with open(f"{args.out_prefix}-type-miss-fractions.tsv", "w") as f:
+        f.write("method\tfraction_del_missed\tfraction_ins_missed\n")
+        f.write(f"STIX-LR MR=1\t{stixlr_mr1_frac_del_missed}\t{stixlr_mr1_frac_ins_missed}\n")
+        f.write(f"STIX-LR MR=5\t{stixlr_mr5_frac_del_missed}\t{stixlr_mr5_frac_ins_missed}\n")
+        f.write(f"needLR\t{needlr_frac_del_missed}\t{needlr_frac_ins_missed}\n")
+        f.write(f"SVAFotate\t{svafotate_frac_del_missed}\t{svafotate_frac_ins_missed}\n")
 
 
 

@@ -18,8 +18,8 @@ parser.add_argument('--vcf_colo_germline', default='../2025_12-colo-filtered/col
 parser.add_argument('--vcf_colo_somatic', default='../2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf')
 # stixlr
 parser.add_argument('--stix_samples', default=1108)
-# parser.add_argument('--stixlr_hg002_mr1', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv')
-# parser.add_argument('--stixlr_hg002_mr5', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv')
+parser.add_argument('--stixlr_hg002_mr1', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv')
+parser.add_argument('--stixlr_hg002_mr5', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_cmrg_mr1', default='../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_cmrg_mr5', default='../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_cosmic_mr1', default='../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv')
@@ -166,12 +166,12 @@ def main():
     merged_datasets={}
     ### hg002
     ids_hg002 = vcf2ids(args.vcf_hg002)
-    # df_hg002_stixlrmr1 = pd.read_csv(args.stixlr_hg002_mr1, sep='\t')
-    # df_hg002_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
-    # df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
-    # df_hg002_stixlrmr5 = pd.read_csv(args.stixlr_hg002_mr5, sep='\t')
-    # df_hg002_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
-    # df_hg002_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_hg002_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
+    df_hg002_stixlrmr1 = pd.read_csv(args.stixlr_hg002_mr1, sep='\t')
+    df_hg002_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_hg002_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
+    df_hg002_stixlrmr5 = pd.read_csv(args.stixlr_hg002_mr5, sep='\t')
+    df_hg002_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+    df_hg002_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_hg002_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
     df_hg002_svafotate05 = pd.read_csv(args.svafotate_hg002_ov05, sep='\t')
     df_hg002_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
     df_hg002_svafotate07 = pd.read_csv(args.svafotate_hg002_ov07, sep='\t')
@@ -185,6 +185,8 @@ def main():
     df_hg002_needlr09 = pd.read_csv(args.needlr_hg002_ov09, sep='\t', usecols=[0, COL_IDX_NEEDLR_AF])
     df_hg002_needlr09.columns = [COL_NAME_SVID, COL_NAME_NEEDLR_AF + '_ov09']
     dfs2merge = [
+            df_hg002_stixlrmr1,
+            df_hg002_stixlrmr5,
             df_hg002_svafotate05,
             df_hg002_svafotate07,
             df_hg002_svafotate09,
