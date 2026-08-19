@@ -3,9 +3,9 @@
 # ./run.sh 2>&1 | tee run.log
 set -euo pipefail
 
-vcf=$(realpath ../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.END.gt50bp.vcf.gz)
+vcf=$(realpath ../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.addEND.gt50bp.vcf.gz)
 outdir=$(pwd)
-timefile=${outdir}/stix_lr-colo.times
+timefile=${outdir}/stix_lr-hg002.times
 index="/data/jake/stix-lr-grch38"
 min_reads=(1 5)
 
