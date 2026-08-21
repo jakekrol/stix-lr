@@ -166,7 +166,7 @@ def plot_data(
     p = correlation.pvalue
     if title:
         ax.set_title(title, fontsize=axis_label_size, loc='left')
-    print(f"r = {r:.2f}, p={p:.2e}")
+    print(f"r = {r:.6f}, p={p:.6e}")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

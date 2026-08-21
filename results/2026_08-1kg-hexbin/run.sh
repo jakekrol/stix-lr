@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 ### stix-lr v needlr pop. freq.
-stixlr_mr1="../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv"
-stixlr_mr5="../2026_08-1kg-stixlr/onekg-stix_lr-min_read_5.popfreq.tsv"
+# stixlr_mr1="../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv"
+stixlr_mr5="../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv"
 needlr_ov05="../2026_08-1kg-needlr/needLR_ov0.5/needlr_pop_freq.tsv"
 needlr_ov07="../2026_08-1kg-needlr/needLR_ov0.7/needlr_pop_freq.tsv"
 needlr_ov09="../2026_08-1kg-needlr/needLR_ov0.9/needlr_pop_freq.tsv"
@@ -15,7 +15,8 @@ cut -f 1,3 $needlr_ov09 > needlr-ov0.9-af.tsv
 needlr_ov05="needlr-ov0.5-popfreq.tsv"
 needlr_ov07="needlr-ov0.7-popfreq.tsv"
 needlr_ov09="needlr-ov0.9-popfreq.tsv"
-stixlr_files=("$stixlr_mr1" "$stixlr_mr5")
+# stixlr_files=("$stixlr_mr1" "$stixlr_mr5")
+stixlr_files=("$stixlr_mr5")
 needlr_files=("$needlr_ov05" "$needlr_ov07" "$needlr_ov09")
 for fstix in "${stixlr_files[@]}"; do
     for fneedlr in "${needlr_files[@]}"; do

@@ -1,0 +1,24 @@
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.5-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.650870, p=0.000000e+00
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.7-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.592340, p=0.000000e+00
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.9-popfreq.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.531170, p=0.000000e+00
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.5-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.5
+r = 0.630690, p=0.000000e+00
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.7-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.7
+r = 0.575298, p=0.000000e+00
+# comparing STIX-LR file ../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv to NEEDLR file needlr-ov0.9-af.tsv
+# parsed min read: 5
+# parsed overlap: 0.9
+r = 0.517754, p=0.000000e+00
