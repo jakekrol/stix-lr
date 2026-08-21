@@ -86,7 +86,7 @@ for fstix in "${stixlr_files[@]}"; do
             --color Blues \
             --height 4 \
             --width 5 \
-            --xlabel "SVAFotate;OV=${ov} population frequency" \
+            --xlabel "SV AF by SVAFotate" \
             --ylabel "Num. of samples with STIX long-read depth >= ${mr}" \
             --merged hexbin-stixlr_mr${mr}-svafotate_ov${ov}.tsv \
             --title "HG002 SVs"
