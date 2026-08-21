@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description='SV frequency benchmark summary')
 parser.add_argument('--vcf_hg002', default='../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.addEND.gt50bp.vcf.gz')
 parser.add_argument('--vcf_hg002_cmrg', default='../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz')
 parser.add_argument('--vcf_cosmic', default='../2026_01-cosmic-tsv-to-vcf/cosmic.v103.grch38.vcf.gz')
-parser.add_argument('--vcf_thousg', default='../../data/2026_08-thousg_svs/1KGP.subset.vcf.gz')
+parser.add_argument('--vcf_thousg', default='../../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz')
 parser.add_argument('--vcf_colo_germline', default='../2025_12-colo-filtered/colo829_germline.vcf')
 parser.add_argument('--vcf_colo_somatic', default='../2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf')
 # stixlr
@@ -24,8 +24,8 @@ parser.add_argument('--stixlr_hg002_cmrg_mr1', default='../2025_12-hg002_cmrg-st
 parser.add_argument('--stixlr_hg002_cmrg_mr5', default='../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_cosmic_mr1', default='../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv')
 parser.add_argument('--stixlr_cosmic_mr5', default='../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv')
-parser.add_argument('--stixlr_thousg_mr1', default='../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv')
-parser.add_argument('--stixlr_thousg_mr5', default='../2026_08-1kg-stixlr/onekg-stix_lr-min_read_5.popfreq.tsv')
+# parser.add_argument('--stixlr_thousg_mr1', default='../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv')
+parser.add_argument('--stixlr_thousg_mr5', default='../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_colo_germline_mr1', default = '../2026_01-colo_filt-stix_lr-rerun/colo_germline-stix_lr-min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_colo_germline_mr5', default = '../2026_01-colo_filt-stix_lr-rerun/colo_germline-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_colo_somatic_mr1', default = '../2026_01-colo_filt-stix_lr-rerun/colo_somatic-stix_lr-min_read_1.popfreq.tsv')
@@ -280,9 +280,9 @@ def main():
     df_recall.to_csv('cosmic-recall.tsv',sep='\t', index=False)
     ### 1000G
     ids_thousg = vcf2ids(args.vcf_thousg)
-    df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
-    df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
-    df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
+    # df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
+    # df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+    # df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'] = df_thousg_stixlrmr1[COL_NAME_STIXLR_SAMPLES + '_mr1'].apply(normalize_stix)
     df_thousg_stixlrmr5 = pd.read_csv(args.stixlr_thousg_mr5, sep='\t')
     df_thousg_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
     df_thousg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'] = df_thousg_stixlrmr5[COL_NAME_STIXLR_SAMPLES + '_mr5'].apply(normalize_stix)
@@ -299,7 +299,7 @@ def main():
     df_thousg_needlr09 = pd.read_csv(args.needlr_thousg_ov09, sep='\t', usecols=[0, COL_IDX_NEEDLR_AF])
     df_thousg_needlr09.columns = [COL_NAME_SVID, COL_NAME_NEEDLR_AF + '_ov09']
     dfs2merge = [
-            df_thousg_stixlrmr1,
+            # df_thousg_stixlrmr1,
             df_thousg_stixlrmr5,
             df_thousg_svafotate05,
             df_thousg_svafotate07,
