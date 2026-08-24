@@ -88,6 +88,16 @@ def bin_frequencies(frequencies):
     })
     return counts
 
+def df2frequency_bins(df):
+    frequency_cols = [c for c in df.columns if c != COL_NAME_SVID]
+
+    counts = pd.DataFrame({
+        col: bin_frequencies(df[col])
+        for col in frequency_cols
+    })
+    counts = counts.T.reset_index().rename(columns={'index': 'tool'})
+    return counts
+
 def plot_frequency_bins(datasets):
     for name, df in datasets.items():
         frequency_cols = [c for c in df.columns if c != COL_NAME_SVID]
@@ -165,6 +175,7 @@ def vcf2ids(path_vcf):
 def main():
     merged_datasets={}
     ### hg002
+    print("# summarizing hg002")
     ids_hg002 = vcf2ids(args.vcf_hg002)
     df_hg002_stixlrmr1 = pd.read_csv(args.stixlr_hg002_mr1, sep='\t')
     df_hg002_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -194,7 +205,6 @@ def main():
             df_hg002_needlr07,
             df_hg002_needlr09
     ]
-    print("# merging hg002")
     df_merged = merge_dfs(dfs2merge, ids_hg002)
     df_merged.to_csv('hg002-merge.tsv', sep='\t', index=False)
     name = "HG002 SVs"
@@ -202,7 +212,11 @@ def main():
     df_recall = merged2recall(df_merged)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('hg002-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merged)
+    df_freq.columns = ['hg002_' + c for c in df_freq.columns]
+    df_freq.to_csv('hg002-freq_bins.tsv', sep='\t', index=False)
     ### hg002 cmrg
+    print("# summarizing hg002cmrg")
     ids_hg002cmrg = vcf2ids(args.vcf_hg002_cmrg)
     df_hg002cmrg_stixlrmr1 = pd.read_csv(args.stixlr_hg002_cmrg_mr1, sep='\t')
     df_hg002cmrg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -232,7 +246,6 @@ def main():
             df_hg002cmrg_needlr07,
             df_hg002cmrg_needlr09
     ]
-    print("# merging hg002cmrg")
     df_merge = merge_dfs(dfs2merge, ids_hg002cmrg)
     df_merge.to_csv('hg002cmrg-merge.tsv', sep='\t', index=False)
     name = "HG002 CMRG SVs"
@@ -240,7 +253,11 @@ def main():
     df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('hg002_cmrg-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merge)
+    df_freq.columns = ["hg002_cmrg_" + c for c in df_freq.columns]
+    df_freq.to_csv('hg002_cmrg-freq_bins.tsv', sep='\t', index=False)
     ### cosmic
+    print("# summarizing cosmic")
     ids_cosmic = vcf2ids(args.vcf_cosmic)
     df_cosmic_stixlrmr1 = pd.read_csv(args.stixlr_cosmic_mr1, sep='\t')
     df_cosmic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -270,7 +287,6 @@ def main():
             df_cosmic_needlr07,
             df_cosmic_needlr09
     ]
-    print("# merging cosmic")
     df_merge = merge_dfs(dfs2merge, ids_cosmic)
     df_merge.to_csv('cosmic-merge.tsv', sep='\t', index=False)
     name = "COSMIC"
@@ -278,7 +294,11 @@ def main():
     df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('cosmic-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merge)
+    df_freq.columns = ["cosmic_" + c for c in df_freq.columns]
+    df_freq.to_csv('cosmic-freq_bins.tsv', sep='\t', index=False)
     ### 1000G
+    print("# summarizing 1000G")
     ids_thousg = vcf2ids(args.vcf_thousg)
     # df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1, sep='\t')
     # df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -308,7 +328,6 @@ def main():
             df_thousg_needlr07,
             df_thousg_needlr09
     ]
-    print("# merging 1000G")
     df_merge = merge_dfs(dfs2merge, vcf2ids(args.vcf_thousg))
     df_merge.to_csv('thousg-merge.tsv', sep='\t', index=False)
     name = "1kg SVs"
@@ -316,7 +335,11 @@ def main():
     df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('thousg-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merge)
+    df_freq.columns = ["thousg_" + c for c in df_freq.columns]
+    df_freq.to_csv('thousg-freq_bins.tsv', sep='\t', index=False)
     ### colo germline
+    print("# summarizing colo germline")
     ids_colo_germline = vcf2ids(args.vcf_colo_germline)
     df_colo_germline_stixlrmr1 = pd.read_csv(args.stixlr_colo_germline_mr1, sep='\t')
     df_colo_germline_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -354,7 +377,11 @@ def main():
     df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('colo_germline-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merge)
+    df_freq.columns = ["colo_germline_" + c for c in df_freq.columns]
+    df_freq.to_csv('colo_germline-freq_bins.tsv', sep='\t', index=False)
     ### colo somatic
+    print("# summarizing colo somatic")
     ids_colo_somatic = vcf2ids(args.vcf_colo_somatic)
     df_colo_somatic_stixlrmr1 = pd.read_csv(args.stixlr_colo_somatic_mr1, sep='\t')
     df_colo_somatic_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -384,7 +411,6 @@ def main():
             df_colo_somatic_needlr07,
             df_colo_somatic_needlr09
     ]
-    print("# merging colo somatic")
     df_merge = merge_dfs(dfs2merge, ids_colo_somatic)
     name = "COLO somatic SVs"
     df_merge.to_csv('colo_somatic-merge.tsv', sep='\t', index=False)
@@ -392,6 +418,9 @@ def main():
     df_recall = merged2recall(df_merge)
     plot_recall_bar(df_recall, name)
     df_recall.to_csv('colo_somatic-recall.tsv',sep='\t', index=False)
+    df_freq = df2frequency_bins(df_merge)
+    df_freq.columns = ["colo_somatic_" + c for c in df_freq.columns]
+    df_freq.to_csv('colo_somatic-freq_bins.tsv', sep='\t', index=False)
     plot_frequency_bins(merged_datasets)
 
 

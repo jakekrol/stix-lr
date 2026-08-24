@@ -1,0 +1,9 @@
+colo_germline_tool	colo_germline_[0,0]	colo_germline_(0,0.001]	colo_germline_(0.001,0.75]	colo_germline_(0.75,1]
+stix_samples_mr1	230	3	17352	12885
+stix_samples_mr5	1964	508	20501	7497
+svafotate_af_ov05	19772	1816	7575	1307
+svafotate_af_ov07	21410	1250	6541	1269
+svafotate_af_ov09	22674	856	5756	1184
+needlr_af_ov05	7050	323	1689	20827
+needlr_af_ov07	11192	178	1056	17463
+needlr_af_ov09	15106	82	582	14119

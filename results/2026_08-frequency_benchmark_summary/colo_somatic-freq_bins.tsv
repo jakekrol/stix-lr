@@ -1,0 +1,9 @@
+colo_somatic_tool	colo_somatic_[0,0]	colo_somatic_(0,0.001]	colo_somatic_(0.001,0.75]	colo_somatic_(0.75,1]
+stix_samples_mr1	40	0	6	0
+stix_samples_mr5	43	0	3	0
+svafotate_af_ov05	27	18	1	0
+svafotate_af_ov07	36	9	1	0
+svafotate_af_ov09	44	2	0	0
+needlr_af_ov05	40	0	1	5
+needlr_af_ov07	41	0	1	4
+needlr_af_ov09	43	0	0	3
