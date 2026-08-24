@@ -82,8 +82,8 @@ COL_NAME_NEEDLR_AF='needlr_af'
 def bin_frequencies(frequencies):
     counts = pd.Series({
     "[0,0]": (frequencies == 0).sum(),
-    "(0,0.001]": ((frequencies > 0) & (frequencies <= 0.001)).sum(),
-    "(0.001,0.75]": ((frequencies > 0.001) & (frequencies <= 0.75)).sum(),
+    "(0,0.01]": ((frequencies > 0) & (frequencies <= 0.01)).sum(),
+    "(0.01,0.75]": ((frequencies > 0.01) & (frequencies <= 0.75)).sum(),
     "(0.75,1]": ((frequencies > 0.75) & (frequencies <= 1)).sum(),
     })
     return counts

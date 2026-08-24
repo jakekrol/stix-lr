@@ -1,9 +1,9 @@
-hg002_cmrg_tool	hg002_cmrg_[0,0]	hg002_cmrg_(0,0.001]	hg002_cmrg_(0.001,0.75]	hg002_cmrg_(0.75,1]
+hg002_cmrg_tool	hg002_cmrg_[0,0]	hg002_cmrg_(0,0.01]	hg002_cmrg_(0.01,0.75]	hg002_cmrg_(0.75,1]
 stix_samples_mr1	0	0	116	102
-stix_samples_mr5	0	0	160	58
-svafotate_af_ov05	113	11	79	15
-svafotate_af_ov07	126	10	67	15
-svafotate_af_ov09	142	8	56	12
-needlr_af_ov05	17	0	113	88
-needlr_af_ov07	43	0	111	64
-needlr_af_ov09	61	0	110	47
+stix_samples_mr5	0	2	158	58
+svafotate_af_ov05	113	14	76	15
+svafotate_af_ov07	126	11	66	15
+svafotate_af_ov09	142	9	55	12
+needlr_af_ov05	17	5	108	88
+needlr_af_ov07	43	5	106	64
+needlr_af_ov09	61	5	105	47
