@@ -1,5 +1,6 @@
-svtype	sv_count	stixlr_gt_thousg_lr_gt_thousg_percent	thousg_gt_stixlr	thousg_gt_stixlr_percent
+svtype	sv_count	stixlr_gt_thousg	stixlr_gt_thousg_percent	thousg_gt_stixlr	thousg_gt_stixlr_percent
 DEL	12145	2455	20.21408	3086	25.40963
 DUP	3965	959	24.18663	999	25.19546
 INS	6945	366	5.26998	4336	62.43341
 INV	128	38	29.68750	64	50.00000
+Total	23183	3818	16.46896	8485	36.60009

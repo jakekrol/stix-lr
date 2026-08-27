@@ -43,7 +43,7 @@ def main():
 	merged = merged[merged["svtype"].isin(SVTYPES)]
 
 	with open(args.output, "w") as f:
-		f.write("svtype\tsv_count\tstixlr_gt_thousg_lr_gt_thousg_percent\tthousg_gt_stixlr\tthousg_gt_stixlr_percent\n")
+		f.write("svtype\tsv_count\tstixlr_gt_thousg\tstixlr_gt_thousg_percent\tthousg_gt_stixlr\tthousg_gt_stixlr_percent\n")
 		for svtype, df_group in merged.groupby("svtype"):
 			n = len(df_group)
 			stixlr_gt_thousg = (df_group[COL_STIX_SAMPLES] > df_group[COL_THOUSG_SAMPLES]).sum()
@@ -53,6 +53,19 @@ def main():
 			f.write(
 				f"{svtype}\t{n}\t{stixlr_gt_thousg}\t{stixlr_gt_thousg_percent:.5f}\t{thousg_gt_stixlr}\t{thousg_gt_stixlr_percent:.5f}\n"
 			)
+		total_svs = merged.shape[0]
+		total_stixlr_gt_thousg = (merged[COL_STIX_SAMPLES] > merged[COL_THOUSG_SAMPLES]).sum()
+		total_thousg_gt_stixlr = (merged[COL_STIX_SAMPLES] < merged[COL_THOUSG_SAMPLES]).sum()
+		total_stixlr_gt_thousg_percent = total_stixlr_gt_thousg / total_svs * 100
+		total_thousg_gt_stixlr_percent = total_thousg_gt_stixlr / total_svs * 100
+		
+		f.write(
+			"{0}\t{1}\t{2}\t{3:.5f}\t{4}\t{5:.5f}".format(
+				"Total", total_svs, total_stixlr_gt_thousg, total_stixlr_gt_thousg_percent,
+				total_thousg_gt_stixlr, total_thousg_gt_stixlr_percent
+				)
+			)
+
 
 if __name__ == "__main__":
     main()
