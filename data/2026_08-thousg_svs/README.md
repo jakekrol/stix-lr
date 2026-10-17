@@ -12,6 +12,6 @@ index=<path to grch38 stix lr index>
 cd $index
 mapfile -t files < <(ls | grep ped)
 echo "# files: ${files[@]}"
-for f in "${files[@]}"; do tail -n +2 $f | cut -f 1 >> sample_id.txt ; done
+for f in "${files[@]}"; do tail -n +2 $f | cut -f 1 | cut -f 1 -d '.' >> sample_id.txt ; done
 sort sample_id.txt | uniq > sample_id.unique.txt
 ```
