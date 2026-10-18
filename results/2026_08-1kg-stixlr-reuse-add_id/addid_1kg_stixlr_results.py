@@ -3,17 +3,17 @@ import argparse
 from cyvcf2 import VCF
 import pandas as pd
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--vcf", default='../../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz', help="1000 genomes vcf used in stix query")
-parser.add_argument("--stix", default='../../data/2026_08-thousg-stix-lr/lr_1kg_pop_freq_t_5.bed', help="STIX results bed")
-parser.add_argument("--output", default='lr_1kg_pop_freq_t_5.addID.bed', help="Output bed file")
+parser = argparse.ArgumentParser("Use STIX regions to lookup SVID from vcf")
+parser.add_argument("--vcf", default='../../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz', help="full vcf")
+parser.add_argument("--vcf_sub", default='../../data/2026_08-thousg_svs/1KGP.subset.vcf.gz', help="subset vcf")
+parser.add_argument("--stix", default='../../data/2026_08-thousg-stix-lr/lr_1kg_pop_freq_t_5.bed', help="STIX samples bed")
+parser.add_argument("--output", default='lr_1kg_pop_freq_t_5.addID.bed', help="output full")
+parser.add_argument("--output_sub", default='lr_1kg_pop_freq_t_5.addID.subset.bed', help="output subset")
 args = parser.parse_args()
 
-def main():
-	vcf = VCF(args.vcf)
-	df = pd.read_csv(args.stix, sep="\t")
-	df.columns = ["chrom", "start", "end", "svtype", "stix_samples"]
-	vcf_data=[]
+def vcf2tbl(path: str):
+	vcf=VCF(path)
+	data_vcf = []
 	for v in vcf:
 		chrom = v.CHROM
 		start = v.POS
@@ -24,12 +24,20 @@ def main():
 			end = start + 10
 		else:
 			end = v.INFO['END']
-		vcf_data.append([chrom, start, end, svtype, svid])
-	df_vcf = pd.DataFrame(vcf_data, columns=["chrom", "start", "end", "svtype", "svid"])
-	merged = pd.merge(df, df_vcf, how='outer', on=["chrom", "start", "end", "svtype"])
-	merged.dropna(subset=["stix_samples"], inplace=True)
-	merged['stix_samples'] = merged['stix_samples'].astype(int)
+		data_vcf.append([chrom, start, end, svtype, svid])
+	return pd.DataFrame(data_vcf,columns=['chrom','start','end','svtype','svid'])
+
+def main():
+	df = pd.read_csv(args.stix, sep="\t")
+	df.columns = ["chrom", "start", "end", "svtype", "stix_samples"]
+	### full vcf
+	df_vcf=vcf2tbl(args.vcf)
+	merged = pd.merge(df, df_vcf, how='left', on=["chrom", "start", "end", "svtype"])
 	merged.to_csv(args.output, sep="\t", index=False)
+	### subset vcf
+	df_vcf=vcf2tbl(args.vcf_sub)
+	merged = pd.merge(df, df_vcf, how='left', on=["chrom", "start", "end", "svtype"])
+	merged.to_csv(args.output_sub, sep="\t", index=False)
 
 
 if __name__ == "__main__":
