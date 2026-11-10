@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+echo "# deprecated for run.py"
+exit 1
+
+
+
 ### stix-lr v needlr pop. freq.
 # stixlr_mr1="../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv"
 stixlr_mr5="../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv"

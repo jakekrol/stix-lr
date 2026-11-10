@@ -1,0 +1,5 @@
+svtype	sv_count	stixlr_gt_needlr	stixlr_gt_needlr_percent	needlr_gt_stixlr	needlr_gt_stixlr_percent
+DEL	10303	8952	86.88731	919	8.91973
+DUP	3550	3174	89.40845	16	0.45070
+INS	5448	2541	46.64097	1668	30.61674
+INV	82	75	91.46341	3	3.65854

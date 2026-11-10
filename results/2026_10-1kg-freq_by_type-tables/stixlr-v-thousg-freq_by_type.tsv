@@ -1,0 +1,5 @@
+svtype	sv_count	stixlr_gt_thousg	stixlr_gt_thousg_percent	thousg_gt_stixlr	thousg_gt_stixlr_percent
+DEL	10303	9288	90.14850	1015	9.85150
+DUP	3550	2708	76.28169	842	23.71831
+INS	5448	2747	50.42217	2701	49.57783
+INV	82	59	71.95122	23	28.04878

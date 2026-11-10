@@ -10,27 +10,30 @@ from cyvcf2 import VCF
 
 parser = argparse.ArgumentParser(description='SV frequency benchmark summary')
 # vcfs
+parser.add_argument('--vcf_thousg', default='../../data/2026_08-thousg_svs/1KGP.subset.vcf.gz')
 parser.add_argument('--vcf_hg002', default='../../data/2026_07-hg002-svs/GRCh38_HG002-T2TQ100-V1.0_stvar.addID.svafotate.STIXanno_minreads5.AF.addEND.gt50bp.vcf.gz')
 parser.add_argument('--vcf_hg002_cmrg', default='../../data/2025_12-hg002-cmrg/HG002_GRCh38_difficult_medical_gene_SV_benchmark_v0.01_trusted_SVTYPE.addID.svafotate.AF.addEND.vcf.gz')
 parser.add_argument('--vcf_cosmic', default='../2026_01-cosmic-tsv-to-vcf/cosmic.v103.grch38.vcf.gz')
-parser.add_argument('--vcf_thousg', default='../../data/2026_08-thousg_svs/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz')
 parser.add_argument('--vcf_colo_germline', default='../2025_12-colo-filtered/colo829_germline.vcf')
 parser.add_argument('--vcf_colo_somatic', default='../2025_12-colo-filtered/colo829_somatic_grch38_nogt00.vcf')
 # stixlr
 parser.add_argument('--stix_samples', default=1108)
+# parser.add_argument('--stixlr_thousg_mr1', default='../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv')
+parser.add_argument('--stixlr_thousg_mr5', default='../2026_08-1kg-stixlr/thousg-stixlr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_mr1', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_mr5', default='../2026_08-hg002-stix_lr/hg002-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_cmrg_mr1', default='../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_hg002_cmrg_mr5', default='../2025_12-hg002_cmrg-stix_lr/hg002_cmrg.stix_lr.min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_cosmic_mr1', default='../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_1.tsv')
 parser.add_argument('--stixlr_cosmic_mr5', default='../2026_01-cosmic-stix_lr/cosmic.stix_lr.min_read_5.tsv')
-# parser.add_argument('--stixlr_thousg_mr1', default='../2026_08-1kg-stixlr/onekg-stix_lr-min_read_1.popfreq.tsv')
-parser.add_argument('--stixlr_thousg_mr5', default='../2026_08-1kg-stixlr-reuse-add_id/onekg-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_colo_germline_mr1', default = '../2026_01-colo_filt-stix_lr-rerun/colo_germline-stix_lr-min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_colo_germline_mr5', default = '../2026_01-colo_filt-stix_lr-rerun/colo_germline-stix_lr-min_read_5.popfreq.tsv')
 parser.add_argument('--stixlr_colo_somatic_mr1', default = '../2026_01-colo_filt-stix_lr-rerun/colo_somatic-stix_lr-min_read_1.popfreq.tsv')
 parser.add_argument('--stixlr_colo_somatic_mr5', default = '../2026_01-colo_filt-stix_lr-rerun/colo_somatic-stix_lr-min_read_5.popfreq.tsv')
 # svafotate
+parser.add_argument('--svafotate_thousg_ov05', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.5_maxpopfreq.txt')
+parser.add_argument('--svafotate_thousg_ov07', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.7_maxpopfreq.txt')
+parser.add_argument('--svafotate_thousg_ov09', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.9_maxpopfreq.txt')
 parser.add_argument('--svafotate_hg002_ov05', default='../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.5_maxpopfreq.txt')
 parser.add_argument('--svafotate_hg002_ov07', default='../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.7_maxpopfreq.txt')
 parser.add_argument('--svafotate_hg002_ov09', default='../2026_08-hg002-svafotate/svafotate-hg002_overlap_0.9_maxpopfreq.txt')
@@ -40,9 +43,6 @@ parser.add_argument('--svafotate_hg002_cmrg_ov09', default='../2025_12-hg002_cmr
 parser.add_argument('--svafotate_cosmic_ov05', default = '../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.5_maxpopfreq.txt')
 parser.add_argument('--svafotate_cosmic_ov07', default = '../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.7_maxpopfreq.txt')
 parser.add_argument('--svafotate_cosmic_ov09', default = '../2026_01-cosmic-svafotate/svafotate-cosmic_overlap_0.9_maxpopfreq.txt')
-parser.add_argument('--svafotate_thousg_ov05', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.5_maxpopfreq.txt')
-parser.add_argument('--svafotate_thousg_ov07', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.7_maxpopfreq.txt')
-parser.add_argument('--svafotate_thousg_ov09', default = '../2026_08-1kg-svafotate/svafotate-1kg_overlap_0.9_maxpopfreq.txt')
 parser.add_argument('--svafotate_colo_germline_ov05', default='../2025_12-colo-svafotate-filtered/svafotate.colo_germline.svid_popfreq.ov0.5.txt')
 parser.add_argument('--svafotate_colo_germline_ov07', default='../2025_12-colo-svafotate-filtered/svafotate.colo_germline.svid_popfreq.ov0.7.txt')
 parser.add_argument('--svafotate_colo_germline_ov09', default='../2025_12-colo-svafotate-filtered/svafotate.colo_germline.svid_popfreq.ov0.9.txt')
@@ -50,6 +50,9 @@ parser.add_argument('--svafotate_colo_somatic_ov05', default='../2025_12-colo-sv
 parser.add_argument('--svafotate_colo_somatic_ov07', default='../2025_12-colo-svafotate-filtered/svafotate.colo_somatic.svid_popfreq.ov0.7.txt')
 parser.add_argument('--svafotate_colo_somatic_ov09', default='../2025_12-colo-svafotate-filtered/svafotate.colo_somatic.svid_popfreq.ov0.9.txt')
 # needlr
+parser.add_argument('--needlr_thousg_ov05', default='../2026_08-1kg-needlr/needLR_ov0.5/needlr_pop_freq.tsv')
+parser.add_argument('--needlr_thousg_ov07', default='../2026_08-1kg-needlr/needLR_ov0.7/needlr_pop_freq.tsv')
+parser.add_argument('--needlr_thousg_ov09', default='../2026_08-1kg-needlr/needLR_ov0.9/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_hg002_ov05', default = '../2026_07-hg002-needlr/needLR_ov0.5/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_hg002_ov07', default = '../2026_07-hg002-needlr/needLR_ov0.7/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_hg002_ov09', default = '../2026_07-hg002-needlr/needLR_ov0.9/needlr_pop_freq.tsv')
@@ -59,9 +62,6 @@ parser.add_argument('--needlr_hg002_cmrg_ov09', default = '../2026_07-hg002_cmrg
 parser.add_argument('--needlr_cosmic_ov05', default='../2026_08-cosmic-needlr/needLR_ov0.5/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_cosmic_ov07', default='../2026_08-cosmic-needlr/needLR_ov0.7/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_cosmic_ov09', default='../2026_08-cosmic-needlr/needLR_ov0.9/needlr_pop_freq.tsv')
-parser.add_argument('--needlr_thousg_ov05', default='../2026_08-1kg-needlr/needLR_ov0.5/needlr_pop_freq.tsv')
-parser.add_argument('--needlr_thousg_ov07', default='../2026_08-1kg-needlr/needLR_ov0.7/needlr_pop_freq.tsv')
-parser.add_argument('--needlr_thousg_ov09', default='../2026_08-1kg-needlr/needLR_ov0.9/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_colo_germline_ov05', default= '../2026_07-colo-needlr/germline_needLR_ov0.5/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_colo_germline_ov07', default= '../2026_07-colo-needlr/germline_needLR_ov0.7/needlr_pop_freq.tsv')
 parser.add_argument('--needlr_colo_germline_ov09', default= '../2026_07-colo-needlr/germline_needLR_ov0.9/needlr_pop_freq.tsv')
@@ -79,6 +79,8 @@ COL_NAME_SVID='svid'
 COL_NAME_STIXLR_SAMPLES='stix_samples'
 COL_NAME_SVAFOTATE_AF='svafotate_af'
 COL_NAME_NEEDLR_AF='needlr_af'
+COL_THOUSG_AF='thousg_af'
+SVTYPES={'DEL', 'DUP', 'INS', 'INV'}
 
 def bin_frequencies(frequencies):
     counts = pd.Series({
@@ -180,8 +182,8 @@ def plot_recall_bar(df_recall, name):
         "svafotate_af_ov09": "SVAFotate;OV=0.9",
         "needlr_af_ov05": "needLR;OV=0.5",
         "needlr_af_ov07": "needLR;OV=0.7",
-        "needlr_af_ov09": "needLR;OV=0.9"
-        
+        "needlr_af_ov09": "needLR;OV=0.9",
+        COL_THOUSG_AF: "1KG"
     }
     df_recall['tool'] = df_recall['tool'].apply(lambda x: xtick_label_map.get(x))
     fig, ax = plt.subplots()
@@ -233,6 +235,68 @@ def vcf2ids(path_vcf):
 
 def main():
     merged_datasets={}
+    ### 1kg
+    print("# summarizing 1kg")
+    if not args.cached:
+        # get SV AF
+        vcf = VCF(args.vcf_thousg)
+        sv_data=[]
+        for v in vcf:
+            svtype = v.INFO['SVTYPE']
+            if svtype in SVTYPES:
+                sv_data.append([v.ID, v.INFO['AF']])
+        df_sv = pd.DataFrame(sv_data,columns=['svid',COL_THOUSG_AF])
+        ids_thousg=vcf2ids(args.vcf_thousg)
+        # df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1,sep='\t')
+        # df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
+        df_thousg_stixlrmr5 = pd.read_csv(args.stixlr_thousg_mr5,sep='\t')
+        df_thousg_stixlrmr5.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr5']
+        df_thousg_svafotate05 = pd.read_csv(args.svafotate_thousg_ov05, sep='\t')
+        df_thousg_svafotate05.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov05']
+        df_thousg_svafotate07 = pd.read_csv(args.svafotate_thousg_ov07, sep='\t')
+        df_thousg_svafotate07.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov07']
+        df_thousg_svafotate09 = pd.read_csv(args.svafotate_thousg_ov09, sep='\t')
+        df_thousg_svafotate09.columns = [COL_NAME_SVID, COL_NAME_SVAFOTATE_AF + '_ov09']
+        df_thousg_needlr05 = pd.read_csv(args.needlr_thousg_ov05, sep='\t', usecols=[0, COL_IDX_NEEDLR_AF])
+        df_thousg_needlr05.columns = [COL_NAME_SVID, COL_NAME_NEEDLR_AF + '_ov05']
+        df_thousg_needlr07 = pd.read_csv(args.needlr_thousg_ov07, sep='\t', usecols=[0, COL_IDX_NEEDLR_AF])
+        df_thousg_needlr07.columns = [COL_NAME_SVID, COL_NAME_NEEDLR_AF + '_ov07']
+        df_thousg_needlr09 = pd.read_csv(args.needlr_thousg_ov09, sep='\t', usecols=[0, COL_IDX_NEEDLR_AF])
+        df_thousg_needlr09.columns = [COL_NAME_SVID, COL_NAME_NEEDLR_AF + '_ov09']
+        dfs2merge = [
+                # df_thousg_stixlrmr1,
+                df_thousg_stixlrmr5,
+                df_thousg_svafotate05,
+                df_thousg_svafotate07,
+                df_thousg_svafotate09,
+                df_thousg_needlr05,
+                df_thousg_needlr07,
+                df_thousg_needlr09
+        ]
+        df_merged = merge_dfs(dfs2merge, ids_thousg)
+        # here, merge onto subset thousg data
+        df_merged = pd.merge(df_sv, df_merged, how='left', on='svid')
+        # and drop SVs with 0 AF in thosug
+        mask = df_merged[COL_THOUSG_AF] > 0
+        df_merged=df_merged[mask]
+        ### temp
+        print('# TEMPORARY SV SUBSET FOR STIX COMPLETED RUNS')
+        stix_svids = set(df_thousg_stixlrmr5['svid'].unique())
+        mask = df_merged['svid'].isin(stix_svids)
+        df_merged = df_merged[mask]
+        df_merged.to_csv('thousg-merge.tsv', sep='\t', index=False)
+    else:
+        df_merged = pd.read_csv("thousg-merge.tsv", sep="\t")
+    name = "1KG SVs"
+    merged_datasets[name] = df_merged
+    df_recall = merged2recall(df_merged)
+    plot_recall_bar(df_recall, name)
+    df_recall.to_csv('thousg-recall.tsv',sep='\t', index=False)
+    # df_freq = df2frequency_bins(df_merged)
+    # df_freq.columns = ['thousg_' + c for c in df_freq.columns]
+    # df_freq.to_csv('thousg-freq_bins.tsv', sep='\t', index=False)
+    import sys
+    sys.exit()
     ### hg002
     print("# summarizing hg002")
     if not args.cached:
