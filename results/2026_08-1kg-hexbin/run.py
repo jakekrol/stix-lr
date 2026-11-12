@@ -9,7 +9,7 @@ parser.add_argument("--output_stix_v_needlr", default="hexbin-stixlr_mr5-needlr.
 args = parser.parse_args()
 
 COL_STIX='stix_samples_mr5'
-COL_THOUSG_AF='thousg_af'
+COL_THOUSG_SAMPLES='thousg_samples'
 COL_NEEDLR_AF='needlr_af_ov05'
 COLOR="Reds"
 
@@ -37,7 +37,7 @@ def main():
     df = pd.read_csv(args.input,sep="\t")
     df_stix = df[['svid', COL_STIX]]
     df_stix.to_csv('stix.tsv',sep='\t',index=False)
-    df_thousg = df[['svid', COL_THOUSG_AF]]
+    df_thousg = df[['svid', COL_THOUSG_SAMPLES]]
     df_thousg.to_csv('thousg.tsv',sep='\t',index=False)
     df_needlr = df[['svid', COL_NEEDLR_AF]]
     df_needlr.to_csv('needlr.tsv',sep='\t',index=False)
@@ -47,7 +47,7 @@ def main():
         "thousg.tsv",
         args.output_stix_v_thousg,
         COLOR,
-        "1KG AF",
+        "Num. of non-reference 1KG samples",
         "Num. of samples with STIX long-read depth >= 5",
         "1KG germline SVs",
         "stixlr-v-thousg.tsv"

@@ -16,7 +16,7 @@ args = parser.parse_args()
 args.stix_samples = int(args.stix_samples)
 
 COL_STIX_SAMPLES="stix_samples_mr5" 
-COL_THOUSG_AF="thousg_af"
+COL_THOUSG_SAMPLES="thousg_samples"
 COL_NEEDLR_AF='needlr_af_ov05'
 SVTYPES = ["DEL", "DUP", "INS", "INV"]
 
@@ -31,7 +31,9 @@ def vcf2tbl(path: str):
 def write_freq_comparison(merged: pd.DataFrame, other: str, out: str):
 	if other == 'thousg':
 		name_other='thousg'
-		col_other=COL_THOUSG_AF
+		col_other=COL_THOUSG_SAMPLES
+		# undo normalizatin for sample comparison
+		merged[COL_STIX_SAMPLES] = merged[COL_STIX_SAMPLES] * args.stix_samples
 	elif other == 'needlr':
 		name_other='needlr'
 		col_other=COL_NEEDLR_AF
@@ -43,24 +45,24 @@ def write_freq_comparison(merged: pd.DataFrame, other: str, out: str):
 			n = len(df_group)
 			stixlr_gt_other = (df_group[COL_STIX_SAMPLES] > df_group[col_other]).sum()
 			other_gt_stixlr = (df_group[COL_STIX_SAMPLES] < df_group[col_other]).sum()
-			stixlr_gt_other_percent = stixlr_gt_other / n * 100
-			other_gt_stixlr_percent = other_gt_stixlr / n * 100
+			stixlr_gt_other_percent = round(stixlr_gt_other / n * 100, 3)
+			other_gt_stixlr_percent = round(other_gt_stixlr / n * 100, 3)
 			f.write(
-				f"{svtype}\t{n}\t{stixlr_gt_other}\t{stixlr_gt_other_percent:.5f}\t{other_gt_stixlr}\t{other_gt_stixlr_percent:.5f}\n"
+				f"{svtype}\t{n}\t{stixlr_gt_other}\t{stixlr_gt_other_percent:.3f}\t{other_gt_stixlr}\t{other_gt_stixlr_percent:.3f}\n"
 			)
 		### for type agnostic comparison
-		# total_svs = merged.shape[0]
-		# total_stixlr_gt_thousg = (merged[COL_STIX_SAMPLES] > merged[COL_THOUSG_AF]).sum()
-		# total_thousg_gt_stixlr = (merged[COL_STIX_SAMPLES] < merged[COL_THOUSG_AF]).sum()
-		# total_stixlr_gt_thousg_percent = total_stixlr_gt_thousg / total_svs * 100
-		# total_thousg_gt_stixlr_percent = total_thousg_gt_stixlr / total_svs * 100
+		total_svs = merged.shape[0]
+		total_stixlr_gt_other = (merged[COL_STIX_SAMPLES] > merged[col_other]).sum()
+		total_other_gt_stixlr = (merged[COL_STIX_SAMPLES] < merged[col_other]).sum()
+		total_stixlr_gt_other_percent = round(total_stixlr_gt_other / total_svs * 100, 3)
+		total_other_gt_stixlr_percent = round(total_other_gt_stixlr / total_svs * 100, 3)
 		
-		# f.write(
-		# 	"{0}\t{1}\t{2}\t{3:.5f}\t{4}\t{5:.5f}".format(
-		# 		"Total", total_svs, total_stixlr_gt_thousg, total_stixlr_gt_thousg_percent,
-		# 		total_thousg_gt_stixlr, total_thousg_gt_stixlr_percent
-		# 		)
-		# 	)
+		f.write(
+			"{0}\t{1}\t{2}\t{3:.3f}\t{4}\t{5:.3f}".format(
+				"Total", total_svs, total_stixlr_gt_other, total_stixlr_gt_other_percent,
+				total_other_gt_stixlr, total_other_gt_stixlr_percent
+				)
+			)
 
 def main():
 	vcf = VCF(args.vcf)

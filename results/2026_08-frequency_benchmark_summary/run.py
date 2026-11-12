@@ -79,7 +79,7 @@ COL_NAME_SVID='svid'
 COL_NAME_STIXLR_SAMPLES='stix_samples'
 COL_NAME_SVAFOTATE_AF='svafotate_af'
 COL_NAME_NEEDLR_AF='needlr_af'
-COL_THOUSG_AF='thousg_af'
+COL_THOUSG_SAMPLES='thousg_samples'
 SVTYPES={'DEL', 'DUP', 'INS', 'INV'}
 
 def bin_frequencies(frequencies):
@@ -183,7 +183,7 @@ def plot_recall_bar(df_recall, name):
         "needlr_af_ov05": "needLR;OV=0.5",
         "needlr_af_ov07": "needLR;OV=0.7",
         "needlr_af_ov09": "needLR;OV=0.9",
-        COL_THOUSG_AF: "1KG"
+        COL_THOUSG_SAMPLES: "1KG"
     }
     df_recall['tool'] = df_recall['tool'].apply(lambda x: xtick_label_map.get(x))
     fig, ax = plt.subplots()
@@ -244,8 +244,11 @@ def main():
         for v in vcf:
             svtype = v.INFO['SVTYPE']
             if svtype in SVTYPES:
-                sv_data.append([v.ID, v.INFO['AF']])
-        df_sv = pd.DataFrame(sv_data,columns=['svid',COL_THOUSG_AF])
+                # gt holds allele1, allele2, and phasing
+                # >0 for any allele means non-ref
+                n_nonref=sum(any(allele>0 for allele in gt[:-1]) for gt in v.genotypes)
+                sv_data.append((v.ID, n_nonref))
+        df_sv = pd.DataFrame(sv_data,columns=['svid',COL_THOUSG_SAMPLES])
         ids_thousg=vcf2ids(args.vcf_thousg)
         # df_thousg_stixlrmr1 = pd.read_csv(args.stixlr_thousg_mr1,sep='\t')
         # df_thousg_stixlrmr1.columns = [COL_NAME_SVID, COL_NAME_STIXLR_SAMPLES + '_mr1']
@@ -277,7 +280,7 @@ def main():
         # here, merge onto subset thousg data
         df_merged = pd.merge(df_sv, df_merged, how='left', on='svid')
         # and drop SVs with 0 AF in thosug
-        mask = df_merged[COL_THOUSG_AF] > 0
+        mask = df_merged[COL_THOUSG_SAMPLES] > 0
         df_merged=df_merged[mask]
         ### temp
         print('# TEMPORARY SV SUBSET FOR STIX COMPLETED RUNS')
@@ -289,9 +292,9 @@ def main():
         df_merged = pd.read_csv("thousg-merge.tsv", sep="\t")
     name = "1KG SVs"
     merged_datasets[name] = df_merged
-    df_recall = merged2recall(df_merged)
-    plot_recall_bar(df_recall, name)
-    df_recall.to_csv('thousg-recall.tsv',sep='\t', index=False)
+    # df_recall = merged2recall(df_merged)
+    # plot_recall_bar(df_recall, name)
+    # df_recall.to_csv('thousg-recall.tsv',sep='\t', index=False)
     # df_freq = df2frequency_bins(df_merged)
     # df_freq.columns = ['thousg_' + c for c in df_freq.columns]
     # df_freq.to_csv('thousg-freq_bins.tsv', sep='\t', index=False)
